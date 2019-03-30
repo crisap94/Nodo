@@ -8,7 +8,7 @@
 #include "BME680.h"
 #include "Arduino.h"
 
-BME680 *BME680::m_BME680 = NULL;
+BME680 *BME680::m_bme680 = NULL;
 
 /**
  * @brief Construct a new BME680::BME680 object

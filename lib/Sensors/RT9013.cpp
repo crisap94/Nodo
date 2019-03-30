@@ -6,34 +6,19 @@
 ///////////////////////////////////////////////////////////
 
 #include "RT9013.h"
+#include "Arduino.h"
 
+RT9013 *RT9013::m_rt9013 = NULL;
 
 RT9013::RT9013(){
-
+	this->m_pcf8574 = PCF8574::getInstance();
+	this->pinConnection = PCF8574::PIN::RT9013_ENABLE;
 }
-
-
 
 RT9013::~RT9013(){
 
 }
 
-
-
-
-
-RT9013::RT9013(PCF8574 pcf8574){
-
-}
-
-
-int RT9013::turnOff(){
-
-	return 0;
-}
-
-
-int RT9013::turnOn(){
-
-	return 0;
+void RT9013::setStatus(STATUS status){
+	this->m_pcf8574->setValue((PCF8574::PIN) this->pinConnection,status);
 }

@@ -9,31 +9,24 @@
 #define EA_523D047F_31C6_48c8_A90D_8F964071951E__INCLUDED_
 
 #include "Battery.h"
-#include "PCF8574.h"
-#include "PCF8591.h"
 #include "RT9013.h"
-#include "SolarPanel.h"
 #include "Sensor.h"
+#include "SolarPanel.h"
 
-class PowerSupplyManager : public Sensor
-{
+class PowerSupplyManager : public Sensor {
+private:
+  Battery *m_battery;
+  RT9013 *m_rt9013;
+  SolarPanel *m_solarPanel;
 
 public:
-	PowerSupplyManager();
-	virtual ~PowerSupplyManager();
-	Battery *m_Battery;
-	RT9013 *m_RT9013;
-	SolarPanel *m_SolarPanel;
-	PowerSupplyManager *m_PowerSupplyManager;
 
-	Sensor getInstance();
-
-private:
-	Battery Battery;
-	PCF8574 pcf8574;
-	PCF8591 pcf8591;
-	RT9013 RT9013;
-	SolarPanel solarPanel;
+  PowerSupplyManager() {
+    this->m_battery = Battery::getInstance();
+    this->m_rt9013 = RT9013::getInstance();
+    this->m_solarPanel = SolarPanel::getInstance();
+  }
+  virtual ~PowerSupplyManager() {}
 
 };
 #endif // !defined(EA_523D047F_31C6_48c8_A90D_8F964071951E__INCLUDED_)

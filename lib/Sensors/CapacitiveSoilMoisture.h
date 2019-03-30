@@ -8,21 +8,32 @@
 #if !defined(EA_3D066AC5_BB3A_49ce_8741_146E2057FE76__INCLUDED_)
 #define EA_3D066AC5_BB3A_49ce_8741_146E2057FE76__INCLUDED_
 
+#include "Analog.h"
 #include "PCF8591.h"
 #include "Sensor.h"
-#include "Analog.h"
 
-class CapacitiveSoilMoisture : public Sensor, public Analog
-{
+
+class CapacitiveSoilMoisture : public Sensor, public Analog {
+private:
+
+  static CapacitiveSoilMoisture *m_CapacitiveSoilMoisture;
+
+  PCF8591 *m_pcf8591;
+
+  int pinConnection;
+  int samplingInterval;
+  
+  CapacitiveSoilMoisture();
+  virtual ~CapacitiveSoilMoisture();
 
 public:
-	CapacitiveSoilMoisture();
-	virtual ~CapacitiveSoilMoisture();
-	CapacitiveSoilMoisture *m_CapacitiveSoilMoisture;
+  static CapacitiveSoilMoisture *getInstance(){
+	  if(m_CapacitiveSoilMoisture == NULL){
+		  m_CapacitiveSoilMoisture = new CapacitiveSoilMoisture();
+	  }
+    return m_CapacitiveSoilMoisture;
+  }
 
-	CapacitiveSoilMoisture(PCF8591 *pcf8591);
-	float getData();
-	Sensor getInstance();
-
+  float getValue();
 };
 #endif // !defined(EA_3D066AC5_BB3A_49ce_8741_146E2057FE76__INCLUDED_)

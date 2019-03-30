@@ -20,8 +20,6 @@ public:
 
 	}
 
-	float getValue();
-
 protected:
 	int pinConnection;
 	int samplingInterval;

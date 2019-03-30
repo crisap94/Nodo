@@ -8,20 +8,15 @@
 #if !defined(EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_)
 #define EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_
 
-class SensorManager
-{
+class SensorManager {
 
 public:
-	SensorManager() {
 
-	}
+  SensorManager() {}
 
-	virtual ~SensorManager() {
+  virtual ~SensorManager() {}
 
-	}
-
-	float cleanData();
-	float getValue();
-
+  float cleanData();
+  float getValue();
 };
 #endif // !defined(EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_)

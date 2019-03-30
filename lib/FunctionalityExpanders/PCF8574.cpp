@@ -7,21 +7,56 @@
 
 #include "PCF8574.h"
 
+PCF8574 *PCF8574::m_pcf8574 = NULL;
 
-PCF8574::PCF8574(){
+PCF8574::PCF8574() {}
+
+PCF8574::~PCF8574() {}
+
+void PCF8574::begin(){
 
 }
 
+boolean PCF8574::getValue(PCF8574::PIN _pin) {
+  boolean value = -1;
+  switch (_pin) {
+  case PCF8574::PIN::TP4056_CHRG_STATUS:
+    value = true;
+    /**
+   * @brief
+   * TODO Set function to get the pin status from the PCF8574
+   *
+   */
+    break;
 
-
-PCF8574::~PCF8574(){
-
+  case PCF8574::PIN::TP4056_STDBY:
+    value = false;
+    /**
+   * @brief
+   * TODO Set function to get the pin status from the PCF8574
+   *
+   */
+    break;
+  }
+  return value;
 }
 
+void PCF8574::setValue(PCF8574::PIN _pin, boolean value) {
+  switch (_pin) {
+  case PCF8574::PIN::TP4056_ENABLE:
+  /**
+   * @brief 
+   * TODO Set function to set the pin status from the PCF8574
+   * 
+   */
+    break;
 
-
-
-
-void PCF8574::getData(){
-
+  case PCF8574::PIN::RT9013_ENABLE:
+      /**
+   * @brief 
+   * TODO Set function to set the pin status from the PCF8574
+   * 
+   */
+      break;
+  }
 }

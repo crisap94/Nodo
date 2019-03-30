@@ -6,28 +6,20 @@
 ///////////////////////////////////////////////////////////
 
 #include "DS3231.h"
+#include "Arduino.h"
 
+DS3231 *DS3231::m_ds3231 = NULL;
 
 DS3231::DS3231(){
 
 }
 
-
-
 DS3231::~DS3231(){
 
 }
 
-
-
-
-
-void DS3231::getData(){
-
+long DS3231::getValue(){
+	long epoch = 0;
+	return epoch;
 }
 
-
-Sensor DS3231::getInstance(){
-
-	return  NULL;
-}

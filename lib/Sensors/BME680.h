@@ -11,20 +11,23 @@
 #include "I2C.h"
 #include "Sensor.h"
 
+
 class BME680 : public Sensor, public I2C {
 private:
-
-  static BME680 *m_BME680;
+  int address;
+  int scl;
+  int sda;
+  static BME680 *m_bme680;
 
   BME680();
   virtual ~BME680();
 
 public:
-  static BME680 *getInstance(){ 
-	  if(m_BME680 == NULL){
-		  m_BME680 = new BME680();
-	  }
-	  return m_BME680;
+  static BME680 *getInstance() {
+    if (m_bme680 == NULL) {
+      m_bme680 = new BME680();
+    }
+    return m_bme680;
   }
 
   void begin();

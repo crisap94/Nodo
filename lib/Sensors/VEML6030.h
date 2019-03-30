@@ -8,20 +8,27 @@
 #if !defined(EA_315ED3C2_7FF3_40b6_BE9E_BA6558E289F0__INCLUDED_)
 #define EA_315ED3C2_7FF3_40b6_BE9E_BA6558E289F0__INCLUDED_
 
-#include "Sensor.h"
 #include "I2C.h"
+#include "Sensor.h"
 
-class VEML6030 : public Sensor, public I2C
-{
+class VEML6030 : public Sensor, public I2C {
+private:
+  int address;
+  int scl;
+  int sda;
+  static VEML6030 *m_veml6030;
+
+  VEML6030();
+  virtual ~VEML6030();
 
 public:
-	VEML6030();
-	virtual ~VEML6030();
-	VEML6030 *m_VEML6030;
-
-	void begin();
-	void getData();
-	Sensor getInstance();
-
+  static VEML6030 *getInstance() {
+    if (m_veml6030 == NULL) {
+      m_veml6030 = new VEML6030();
+    }
+	return m_veml6030;
+  }
+  void begin();
+  float getValue();
 };
 #endif // !defined(EA_315ED3C2_7FF3_40b6_BE9E_BA6558E289F0__INCLUDED_)

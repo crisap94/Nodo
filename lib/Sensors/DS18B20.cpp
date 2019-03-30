@@ -6,33 +6,24 @@
 ///////////////////////////////////////////////////////////
 
 #include "DS18B20.h"
+#include "Arduino.h"
 
+DS18B20 *DS18B20::m_ds18b20 = NULL;
 
 DS18B20::DS18B20(){
 
 }
 
-
-
 DS18B20::~DS18B20(){
 
 }
-
-
-
-
 
 void DS18B20::begin(){
 
 }
 
 
-void DS18B20::getData(){
-
-}
-
-
-Sensor DS18B20::getInstance(){
-
-	return  NULL;
+float DS18B20::getValue(){
+	randomSeed(analogRead(A0));
+	return random(25,27);
 }

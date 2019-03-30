@@ -6,28 +6,15 @@
 ///////////////////////////////////////////////////////////
 
 #include "VEML6030.h"
+#include "Arduino.h"
 
+VEML6030 *VEML6030::m_veml6030 = NULL;
 
-VEML6030::VEML6030(){
+VEML6030::VEML6030() {}
 
-}
+VEML6030::~VEML6030() {}
 
-
-
-VEML6030::~VEML6030(){
-
-}
-
-
-
-
-
-void VEML6030::getData(){
-
-}
-
-
-Sensor VEML6030::getInstance(){
-
-	return  NULL;
+float VEML6030::getValue() {
+  randomSeed(analogRead(A0));
+  return random(600, 700);
 }

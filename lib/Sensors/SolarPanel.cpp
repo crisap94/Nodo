@@ -1,23 +1,23 @@
 ///////////////////////////////////////////////////////////
-//  NTC.cpp
-//  Implementation of the Class NTC
-//  Created on:      28-Mar-2019 4:29:35 PM
+//  SolarPanel.cpp
+//  Implementation of the Class SolarPanel
+//  Created on:      28-Mar-2019 4:29:37 PM
 //  Original author: Cristian Arrieta P
 ///////////////////////////////////////////////////////////
 
-#include "NTC.h"
+#include "SolarPanel.h"
 #include "Arduino.h"
 
-NTC *NTC::m_ntc = NULL;
+SolarPanel *SolarPanel::m_solarPanel = NULL;
 
-NTC::NTC() {
+SolarPanel::SolarPanel() {
   this->m_pcf8591 = PCF8591::getInstance();
-  this->pinConnection = PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE;
+  this->pinConnection = PCF8591::PIN::PANEL_VOLTAJE;
   this->samplingInterval = 5;
 }
 
-NTC::~NTC() {}
+SolarPanel::~SolarPanel() {}
 
-float NTC::getValue() {
+float SolarPanel::getVoltaje() {
   return this->m_pcf8591->getValue((PCF8591::PIN)this->pinConnection);
 }

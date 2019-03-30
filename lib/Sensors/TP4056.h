@@ -8,20 +8,33 @@
 #if !defined(EA_E627994B_0A23_4553_A41E_96984CEF63D0__INCLUDED_)
 #define EA_E627994B_0A23_4553_A41E_96984CEF63D0__INCLUDED_
 
-#include "PCF8574.h"
 #include "Digital.h"
+#include "PCF8574.h"
 
-class TP4056 : public Digital
-{
+enum Status {
+  CHARGING,
+  STAND_BY
+};
+
+class TP4056 : public Digital {
+private:
+  static TP4056 *m_tp4056;
+  PCF8574 *m_pcf8574;
+  TP4056();
+  virtual ~TP4056();
+  int pinChrg;
+  int pinStby;
+  int pinEnable;
 
 public:
-	TP4056();
-	virtual ~TP4056();
+  static TP4056 *getInstance() {
+    if (m_tp4056 == NULL) {
+      m_tp4056 = new TP4056();
+    }
+    return m_tp4056;
+  }
 
-	TP4056(PCF8574 pcf8574);
-	boolean checkBatt();
-	int turnOff();
-	int turnOn();
-
+  boolean getStatus();
+  void enable();
 };
 #endif // !defined(EA_E627994B_0A23_4553_A41E_96984CEF63D0__INCLUDED_)

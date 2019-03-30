@@ -8,21 +8,11 @@
 #if !defined(EA_989514A8_BAE5_4c5b_911E_CCE78BD2AE1E__INCLUDED_)
 #define EA_989514A8_BAE5_4c5b_911E_CCE78BD2AE1E__INCLUDED_
 
-class Digital
-{
+class Digital {
 
 public:
-	Digital() {
+  Digital() {}
 
-	}
-
-	virtual ~Digital() {
-
-	}
-	int enablePin;
-
-	int turnOff();
-	int turnOn();
-
+  virtual ~Digital() {}
 };
 #endif // !defined(EA_989514A8_BAE5_4c5b_911E_CCE78BD2AE1E__INCLUDED_)

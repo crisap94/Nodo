@@ -13,15 +13,25 @@
 
 class VEML6075 : public Sensor, public I2C
 {
+  private:
+	int address;
+	int scl;
+	int sda;
+	static VEML6075 *m_veml6075;
 
-public:
 	VEML6075();
 	virtual ~VEML6075();
-	VEML6075 *m_VEML6075;
 
+  public:
+	static VEML6075 *getInstance()
+	{
+		if (m_veml6075 == NULL)
+		{
+			m_veml6075 = new VEML6075();
+		}
+		return m_veml6075;
+	}
 	void begin();
-	void getData();
-	Sensor getInstance();
-
+	float getValue();
 };
 #endif // !defined(EA_9379FF0E_1B64_4869_B859_4ADF835D3B39__INCLUDED_)

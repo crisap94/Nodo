@@ -6,34 +6,18 @@
 ///////////////////////////////////////////////////////////
 
 #include "CapacitiveSoilMoisture.h"
+#include "Arduino.h"
 
+CapacitiveSoilMoisture *CapacitiveSoilMoisture::m_CapacitiveSoilMoisture = NULL;
 
-CapacitiveSoilMoisture::CapacitiveSoilMoisture(){
-
+CapacitiveSoilMoisture::CapacitiveSoilMoisture() {
+  this->m_pcf8591 = PCF8591::getInstance();
+  this->pinConnection = PCF8591::PIN::SOIL_HUMIDITY_VOLTAJE;
+  this->samplingInterval = 5;
 }
 
+CapacitiveSoilMoisture::~CapacitiveSoilMoisture() {}
 
-
-CapacitiveSoilMoisture::~CapacitiveSoilMoisture(){
-
-}
-
-
-
-
-
-CapacitiveSoilMoisture::CapacitiveSoilMoisture(PCF8591 pcf8591){
-
-}
-
-
-float CapacitiveSoilMoisture::getData(){
-
-	return 0;
-}
-
-
-Sensor CapacitiveSoilMoisture::getInstance(){
-
-	return  NULL;
+float CapacitiveSoilMoisture::getValue() {
+  return this->m_pcf8591->getValue((PCF8591::PIN)this->pinConnection);
 }

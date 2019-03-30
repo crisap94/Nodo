@@ -10,25 +10,24 @@
 
 #include "Arduino.h"
 
-class Sensor
-{
+class Sensor {
 
 public:
-	Sensor() {
-		/**
-		 * * Creating a Sensor
-		 * TODO Implement DEBUG 
-		 * 
-		 */
-	}
 
-	virtual ~Sensor() {
-		/**
-		 * * Deleting a Sensor
-		 * TODO Implement DEBUG
-		 *
-		 */
-	}
+  Sensor() {
+    /**
+     * * Creating a Sensor
+     * TODO Implement DEBUG
+     *
+     */
+  }
 
+  virtual ~Sensor() {
+    /**
+     * * Deleting a Sensor
+     * TODO Implement DEBUG
+     *
+     */
+  }
 };
 #endif // !defined(EA_D734ED5C_255B_4b2c_90F6_07671D362DDD__INCLUDED_)

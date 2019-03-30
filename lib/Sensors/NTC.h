@@ -8,21 +8,30 @@
 #if !defined(EA_CE9233F3_0BB0_419e_A745_11B236F4F9B4__INCLUDED_)
 #define EA_CE9233F3_0BB0_419e_A745_11B236F4F9B4__INCLUDED_
 
-#include "Sensor.h"
-#include "PCF8591.h"
 #include "Analog.h"
+#include "Sensor.h"
+#include "pcf8591.h"
 
-class NTC : public Analog, public Sensor
-{
+
+class NTC : public Analog, public Sensor {
+private:
+  static NTC *m_ntc;
+
+  PCF8591 *m_pcf8591;
+
+  int pinConnection;
+  int samplingInterval;
+
+  NTC();
+  virtual ~NTC();
 
 public:
-	NTC();
-	virtual ~NTC();
-	NTC *m_NTC;
-
-	NTC(PCF8591 pcf8591);
-	float getData();
-	Sensor getInstance();
-
+  static NTC *getInstance() {
+    if (m_ntc == NULL) {
+      m_ntc = new NTC();
+    }
+    return m_ntc;
+  }
+  float getValue();
 };
 #endif // !defined(EA_CE9233F3_0BB0_419e_A745_11B236F4F9B4__INCLUDED_)
