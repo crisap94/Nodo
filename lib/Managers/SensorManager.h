@@ -22,13 +22,13 @@ public:
     DataCleaner<long> *sensor = new DataCleaner<long>;
     sensor->begin(SMOOTHED_EXPONENTIAL, 10);
     for (int i = 0; i < 10; i++) {
-      sensor->add(getValue());
+      sensor->add(getData());
     }
-    long value = sensor->get();
+    float value = sensor->get();
     delete sensor;
     return value;
   }
 
-  virtual float getValue(){ return 0;};
+  virtual float getData(){ return 0;};
 };
 #endif // !defined(EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_)
