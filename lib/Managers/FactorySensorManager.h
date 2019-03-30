@@ -15,19 +15,19 @@ class FactorySensorManager {
 
 public:
   enum TYPE_SENSOR_MANAGER {
-    AMBIENT_HUMIDITY = 0,
-    AMBIENT_TEMPERATURE,
-    AMBIENT_PRESSURE,
-    SOIL_TEMP,
-    SOIL_HUMIDITY,
-    BATT_VOLTAJE,
-    BATT_TEMPERATURE,
-    BATT_STATUS,
-    PANEL_VOLTAJE,
-    ULTRAVIOLE_INDEX,
-    BRIGHTNESS,
-    VOLATILE_ORGANIC_COMPUNDS,
-    EPOCH
+    AMBIENT_HUMIDITY            = 0,
+    AMBIENT_TEMPERATURE         = 1,
+    AMBIENT_PRESSURE            = 2,
+    SOIL_TEMP                   = 3,
+    SOIL_HUMIDITY               = 4,
+    BATT_VOLTAJE                = 5,
+    BATT_TEMPERATURE            = 6,
+    BATT_STATUS                 = 7,
+    PANEL_VOLTAJE               = 8,
+    ULTRAVIOLE_INDEX            = 9,
+    BRIGHTNESS                  = 10,
+    VOLATILE_ORGANIC_COMPUNDS   = 11,
+    EPOCH                       = 12,
   };
   FactorySensorManager();
   virtual ~FactorySensorManager();

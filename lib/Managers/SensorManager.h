@@ -8,27 +8,30 @@
 #if !defined(EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_)
 #define EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_
 
-#include "DataCleaner.h"
 #include "Arduino.h"
+#include "DataCleaner.h"
 
 class SensorManager {
 
 public:
-  SensorManager() {}
+  SensorManager() { }
 
   virtual ~SensorManager() {}
-
-  virtual long getCleanedData() {
+  // std::function<void (const long&)> _callBackFunction
+  // void (*_callBackFunction)(long data)
+  
+  virtual long getCleanedData(function<void(const long &)> _callBackFunction)
+  {
     DataCleaner<long> *sensor = new DataCleaner<long>;
     sensor->begin(SMOOTHED_EXPONENTIAL, 10);
     for (int i = 0; i < 10; i++) {
       sensor->add(getData());
     }
-    float value = sensor->get();
-    delete sensor;
+    long value = sensor->get();
+    _callBackFunction(value);
     return value;
   }
 
-  virtual float getData(){ return 0;};
+  virtual float getData() { return 0; };
 };
 #endif // !defined(EA_B3F3D724_985C_4bb8_B895_BA6B571D95BD__INCLUDED_)

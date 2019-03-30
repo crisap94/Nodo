@@ -10,6 +10,8 @@
 
 #include "FactorySensorManager.h"
 
+#define MANAGER_SIZE 13
+
 class DataManager {
 
 public:
@@ -19,24 +21,8 @@ public:
   void getVariableData();
 
 private:
-  struct variables {
-    float ambientHumidity = 0;
-    float ambientTemperature = 0;
-    float ambientPressure = 0;
-    float battStatus = 0;
-    float battTemperature = 0;
-    float battVoltaje = 0;
-    float ambientBrightness = 0;
-    long epoch = 0;
-    float panelVoltaje = 0;
-    float soilHumidity = 0;
-    float soilTemperature = 0;
-    float ambientUv = 0;
-    float ambientVoc = 0;
-  };
-
-  variables *data;
-  FactorySensorManager::TYPE_SENSOR_MANAGER managers[13];
+  long variables[MANAGER_SIZE];
+  FactorySensorManager::TYPE_SENSOR_MANAGER managers[MANAGER_SIZE];
   FactorySensorManager *m_factoryManager;
 };
 #endif // !defined(EA_542022A9_4749_4b6e_BA6F_80DFB9BB0B34__INCLUDED_)
