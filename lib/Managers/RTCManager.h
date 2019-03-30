@@ -9,10 +9,11 @@
 #define EA_63376D6A_3BA1_4b40_B100_76A9BC55088F__INCLUDED_
 
 #include "SensorManager.h"
+#include "DS3231.h"
 
 class RTCManager : public SensorManager {
 private:
-  float getValue() { return DS3231::getInstance->getValue(); }
+  float getValue() { return DS3231::getInstance()->getValue(); }
 
 public:
   RTCManager();

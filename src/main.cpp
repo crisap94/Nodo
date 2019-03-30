@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #include "DataManager.h"
-#include "BME680.h"
+/* #include "BME680.h"
 #include "CapacitiveSoilMoisture.h"
 #include "DS18B20.h"
 #include "DS3231.h"
@@ -17,17 +17,21 @@ DS3231 *m_ds3231;
 VEML6030 *m_veml6030;
 VEML6075 *m_veml6075;
 
-PowerSupplyManager *m_powerSupplyManager;
+PowerSupplyManager *m_powerSupplyManager; */
+
+DataManager *m_dataManager;
 
 void setup() {
   // put your setup code here, to run once:
-  m_BME680 = BME680::getInstance();
+/*   m_BME680 = BME680::getInstance();
   m_CapacitiveSoilMoisture = CapacitiveSoilMoisture::getInstance();
   m_ds18b20 = DS18B20::getInstance();
   m_ds3231 = DS3231::getInstance();
   m_veml6030 = VEML6030::getInstance();
   m_veml6075 = VEML6075::getInstance();
-  m_powerSupplyManager = new PowerSupplyManager();
+  m_powerSupplyManager = new PowerSupplyManager(); */
+
+  m_dataManager = new DataManager();
 }
   
 void loop() {

@@ -14,12 +14,10 @@
 #include "SolarPanel.h"
 
 class PowerSupplyManager : public Sensor {
-private:
+public:
   Battery *m_battery;
   RT9013 *m_rt9013;
   SolarPanel *m_solarPanel;
-
-public:
 
   PowerSupplyManager() {
     this->m_battery = Battery::getInstance();
