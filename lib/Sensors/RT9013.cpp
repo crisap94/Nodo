@@ -19,6 +19,6 @@ RT9013::~RT9013(){
 
 }
 
-void RT9013::setStatus(STATUS status){
+void RT9013::setStatus(RT9013::TP4056_STATUS status){
 	this->m_pcf8574->setValue((PCF8574::PIN) this->pinConnection,status);
 }

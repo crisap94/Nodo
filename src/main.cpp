@@ -29,7 +29,7 @@ void setup() {
   m_veml6075 = VEML6075::getInstance();
   m_powerSupplyManager = new PowerSupplyManager();
 }
-
+  
 void loop() {
   // put your main code here, to run repeatedly:
 }

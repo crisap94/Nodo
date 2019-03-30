@@ -9,16 +9,16 @@
 #define EA_7DAEB1F8_E6A5_41b9_87ED_7E1729D2F294__INCLUDED_
 
 #include "SensorManager.h"
+#include "DS18B20.h"
 
 class SoilTempManager : public SensorManager
 {
+  private:
+	float getValue() { return DS18B20::getInstance()->getValue();}
 
-public:
+  public:
 	SoilTempManager();
 	virtual ~SoilTempManager();
-
-	float getValue();
-	float cleanData();
 
 };
 #endif // !defined(EA_7DAEB1F8_E6A5_41b9_87ED_7E1729D2F294__INCLUDED_)

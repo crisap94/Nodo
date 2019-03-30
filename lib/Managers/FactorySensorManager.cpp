@@ -31,7 +31,7 @@ FactorySensorManager::~FactorySensorManager()
 
 SensorManager *FactorySensorManager::createManager(TYPE_SENSOR_MANAGER type)
 {
-    SensorManager *sensorManager = new SensorManager();
+    SensorManager *sensorManager;
     switch (type)
     {
     case AMBIENT_HUMIDITY:

@@ -9,16 +9,18 @@
 #define EA_007B0A38_6270_4e01_81F3_1F29D846DBF9__INCLUDED_
 
 #include "SensorManager.h"
-
-class BatteryTemperatureManager : public SensorManager
-{
+#include "PowerSupplyManager.h"
+class BatteryTemperatureManager : public SensorManager {
+private:
+  float getValue() {
+    PowerSupplyManager *ps = new PowerSupplyManager();
+    bool temp = ps->m_battery->getTemp();
+    delete ps;
+    return temp;
+  }
 
 public:
-	BatteryTemperatureManager();
-	virtual ~BatteryTemperatureManager();
-
-	float getValue();
-	float cleanData();
-
+  BatteryTemperatureManager();
+  virtual ~BatteryTemperatureManager();
 };
 #endif // !defined(EA_007B0A38_6270_4e01_81F3_1F29D846DBF9__INCLUDED_)

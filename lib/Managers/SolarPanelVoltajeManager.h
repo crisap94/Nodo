@@ -8,17 +8,21 @@
 #if !defined(EA_657FA90A_7FCB_4a34_9758_59AECF8ADE25__INCLUDED_)
 #define EA_657FA90A_7FCB_4a34_9758_59AECF8ADE25__INCLUDED_
 
+#include "PowerSupplyManager.h"
 #include "SensorManager.h"
 
-class SolarPanelVoltajeManager : public SensorManager
-{
+class SolarPanelVoltajeManager : public SensorManager {
+private:
+  float getValue() {
+    PowerSupplyManager *ps = new PowerSupplyManager();
+    bool voltaje = ps->m_solarPanel->getVoltaje();
+    delete ps;
+    return voltaje;
+  }
 
 public:
-	SolarPanelVoltajeManager();
-	virtual ~SolarPanelVoltajeManager();
-
-	float getValue();
-	float cleanData();
+  SolarPanelVoltajeManager();
+  virtual ~SolarPanelVoltajeManager();
 
 };
 #endif // !defined(EA_657FA90A_7FCB_4a34_9758_59AECF8ADE25__INCLUDED_)

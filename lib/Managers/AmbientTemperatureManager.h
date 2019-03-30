@@ -9,16 +9,15 @@
 #define EA_91FC7453_B35D_40f2_9F99_843A3DC23E5A__INCLUDED_
 
 #include "SensorManager.h"
+#include "BME680.h"
 
-class AmbientTemperatureManager : public SensorManager
-{
+class AmbientTemperatureManager : public SensorManager {
+private:
+  float getValue() { return BME680::getInstance()->getTemperature(); }
 
 public:
-	AmbientTemperatureManager();
-	virtual ~AmbientTemperatureManager();
-
-	float getValue();
-	float cleanData();
+  AmbientTemperatureManager();
+  virtual ~AmbientTemperatureManager();
 
 };
 #endif // !defined(EA_91FC7453_B35D_40f2_9F99_843A3DC23E5A__INCLUDED_)
