@@ -14,7 +14,7 @@
 class SoilTempManager : public SensorManager
 {
   private:
-	float getValue() { return DS18B20::getInstance()->getValue();}
+	float getData() { return DS18B20::getInstance()->getValue();}
 
   public:
 	SoilTempManager();

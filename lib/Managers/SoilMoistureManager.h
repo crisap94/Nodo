@@ -13,7 +13,7 @@
 
 class SoilMoistureManager : public SensorManager {
 private:
-  float getValue() { return CapacitiveSoilMoisture::getInstance()->getValue(); }
+  float getData() { return CapacitiveSoilMoisture::getInstance()->getValue(); }
 
 public:
   SoilMoistureManager();

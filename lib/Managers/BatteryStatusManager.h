@@ -13,7 +13,7 @@
 
 class BatteryStatusManager : public SensorManager {
 private:
-  float getValue() {
+  float getData() {
     PowerSupplyManager *ps = new PowerSupplyManager();
 	bool status = ps->m_battery->getStatus();
 	delete ps;

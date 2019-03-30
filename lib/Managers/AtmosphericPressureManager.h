@@ -13,7 +13,7 @@
 
 class AtmosphericPressureManager : public SensorManager {
 private:
-  float getValue() { return BME680::getInstance()->getPressure(); }
+  float getData() { return BME680::getInstance()->getPressure(); }
 
 public:
   AtmosphericPressureManager();

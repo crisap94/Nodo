@@ -13,12 +13,12 @@
 
 class RTCManager : public SensorManager {
 private:
-  float getValue() { return DS3231::getInstance()->getValue(); }
+  float getData() { return DS3231::getInstance()->getValue(); }
 
 public:
   RTCManager();
   virtual ~RTCManager();
 
-  long getCleanedData() { return getValue(); }
+  long getCleanedData() { return getData(); }
 };
 #endif // !defined(EA_63376D6A_3BA1_4b40_B100_76A9BC55088F__INCLUDED_)

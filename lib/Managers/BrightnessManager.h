@@ -13,7 +13,7 @@
 
 class BrightnessManager : public SensorManager {
 private:
-  float getValue() { return VEML6030::getInstance()->getValue(); }
+  float getData() { return VEML6030::getInstance()->getValue(); }
 
 public:
   BrightnessManager();

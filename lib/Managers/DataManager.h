@@ -18,8 +18,8 @@ public:
   void getPayload(char *payload[700]);
   void getVariableData();
 
-      private : struct Variables
-  {
+private:
+  struct variables {
     float ambientHumidity = 0;
     float ambientTemperature = 0;
     float ambientPressure = 0;
@@ -34,7 +34,8 @@ public:
     float ambientUv = 0;
     float ambientVoc = 0;
   };
-  Variables *data;
+
+  variables *data;
   FactorySensorManager::TYPE_SENSOR_MANAGER managers[13];
   FactorySensorManager *m_factoryManager;
 };

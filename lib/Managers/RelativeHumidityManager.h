@@ -13,7 +13,7 @@
 class RelativeHumidityManager : public SensorManager
 {
   private:
-	float getValue() { return BME680::getInstance()->getHumidity(); }
+	float getData() { return BME680::getInstance()->getHumidity(); }
 
   public:
 	RelativeHumidityManager();

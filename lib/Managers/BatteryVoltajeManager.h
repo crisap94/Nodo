@@ -12,7 +12,7 @@
 #include "PowerSupplyManager.h"
 class BatteryVoltajeManager : public SensorManager {
 private:
-  float getValue() {
+  float getData() {
     PowerSupplyManager *ps = new PowerSupplyManager();
     bool voltaje = ps->m_battery->getVoltaje();
     delete ps;

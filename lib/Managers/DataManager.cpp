@@ -32,7 +32,7 @@ DataManager::~DataManager() {}
 
 void DataManager::getVariableData() {
   for (int i = 0; i < 13; i++) {
-    m_factoryManager->createManager(this->managers[i])->getValue();
+    m_factoryManager->createManager(this->managers[i])->getData();
   }
 }
 

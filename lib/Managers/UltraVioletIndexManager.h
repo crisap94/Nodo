@@ -13,7 +13,7 @@
 class UltraVioletIndexManager : public SensorManager
 {
   private:
-	float getValue() { return VEML6075::getInstance()->getValue() ;}
+	float getData() { return VEML6075::getInstance()->getValue() ;}
 
   public:
 	UltraVioletIndexManager();

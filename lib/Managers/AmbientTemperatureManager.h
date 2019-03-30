@@ -13,7 +13,7 @@
 
 class AmbientTemperatureManager : public SensorManager {
 private:
-  float getValue() { return BME680::getInstance()->getTemperature(); }
+  float getData() { return BME680::getInstance()->getTemperature(); }
 
 public:
   AmbientTemperatureManager();

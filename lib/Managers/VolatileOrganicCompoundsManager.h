@@ -14,7 +14,7 @@
 
 class VolatileOrganicCompoundsManager : public SensorManager {
 private:
-  float getValue() { return BME680::getInstance()->getVOC(); }
+  float getData() { return BME680::getInstance()->getVOC(); }
 
 public:
   VolatileOrganicCompoundsManager();
