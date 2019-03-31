@@ -8,17 +8,17 @@
 #if !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)
 #define EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_
 
-class ConectionManager
-{
+#include "DataManager.h"
+
+class ConectionManager {
 
 public:
-	ConectionManager();
-	virtual ~ConectionManager();
+  ConectionManager();
+  virtual ~ConectionManager();
 
-	char getPayload();
-	bool isConnected();
-	void sendPayload();
-	void sendQueuedData();
-
+  char getPayload();
+  bool isConnected();
+  void sendPayload();
+  void sendQueuedData();
 };
 #endif // !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)
