@@ -21,7 +21,7 @@ public:
 
 private:
   void getPayload();
-  char json_array[700];
+  char json_array[450];
   void getVariableData();
   long variables[MANAGER_SIZE];
   FactorySensorManager::TYPE_SENSOR_MANAGER managers[MANAGER_SIZE];
