@@ -16,8 +16,10 @@ void receivedCallback(uint32_t from, String &msg);
 size_t logServerId = 0;
 
 // Send message to the logServer every 10 seconds
-Task myLoggingTask(10000, TASK_FOREVER, []() {
-  String json = String(m_dataManager->getJSON());
+Task myLoggingTask(5000, TASK_FOREVER, []() {
+  const char* payload = m_dataManager->getJSON();
+  String json = String(payload);
+  Serial.println(json);
   if (logServerId == 0) // If we don't know the logServer yet
     mesh.sendBroadcast(json);
   else
