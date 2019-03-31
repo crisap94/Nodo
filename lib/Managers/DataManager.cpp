@@ -75,12 +75,12 @@ void DataManager::getPayload() {
   config["mac"]                   = "24-EC-64-A1-A7-C4";
   config["rssi"]                  = "-67";
   config["channel"]               = 13;
-
+  
   serializeJson(doc, this->json_array);
   // Serial.println("Generando JSON");
 }
 
-char* DataManager::getJSON(){
+String DataManager::getJSON(){
   getPayload();
 
   return json_array;

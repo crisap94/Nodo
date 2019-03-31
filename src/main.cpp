@@ -20,8 +20,8 @@ size_t logServerId = 0;
 Task myLoggingTask(5000, TASK_FOREVER, []() {
 
   
-  const char* payload = m_dataManager->getJSON();
-  String json = String(payload);
+  String json = m_dataManager->getJSON();
+  
   Serial.println(json);
   if (logServerId == 0) // If we don't know the logServer yet
     mesh.sendBroadcast(json);
