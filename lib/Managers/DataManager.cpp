@@ -50,31 +50,31 @@ void DataManager::getPayload() {
   DynamicJsonDocument doc(capacity);
 
   JsonObject data = doc.createNestedObject("data");
-  data["temperature"]             = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::AMBIENT_TEMPERATURE];
-  data["humidity"]                = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::AMBIENT_HUMIDITY];
-  data["soilHumidity"]            = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::SOIL_HUMIDITY];
-  data["pressure"]                = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::AMBIENT_PRESSURE];
-  data["uv"]                      = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::ULTRAVIOLE_INDEX];
-  data["brightness"]              = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BRIGHTNESS];
-  data["floorTemperature"]        = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::SOIL_TEMP];
-  data["volatileGases"]           = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::VOLATILE_ORGANIC_COMPUNDS];
-  data["panelvoltaje"]            = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::PANEL_VOLTAJE];
-  data["timestamp"]               = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::EPOCH];
+  data["te"]             = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::AMBIENT_TEMPERATURE];
+  data["h"]                = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::AMBIENT_HUMIDITY];
+  data["sH"]            = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::SOIL_HUMIDITY];
+  data["p"]                = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::AMBIENT_PRESSURE];
+  data["u"]                      = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::ULTRAVIOLE_INDEX];
+  data["b"]              = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BRIGHTNESS];
+  data["sT"]        = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::SOIL_TEMP];
+  data["v"]           = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::VOLATILE_ORGANIC_COMPUNDS];
+  data["pV"]            = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::PANEL_VOLTAJE];
+  data["ti"]               = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::EPOCH];
 
   JsonObject data_gps = data.createNestedObject("gps");
-  data_gps["latitude"]            = "10.399080";
-  data_gps["longitude"]           = "-75.504142";
+  data_gps["lat"]            = "10.399080";
+  data_gps["lon"]           = "-75.504142";
 
-  data["batteryVoltaje"]          = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BATT_VOLTAJE];
-  data["batteryTmeperature"]      = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BATT_TEMPERATURE];
+  data["bV"]          = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BATT_VOLTAJE];
+  data["bT"]      = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BATT_TEMPERATURE];
 
-  doc["zoneId"]                   = "5ac012583e194204e0afef6b";
-  doc["firmwareVersion"]          = "V1.0";
+  doc["zI"]                   = "5ac012583e194204e0afef6b";
+  doc["fV"]          = "V1.0";
 
-  JsonObject config = doc.createNestedObject("config");
-  config["mac"]                   = "24-EC-64-A1-A7-C4";
-  config["rssi"]                  = "-67";
-  config["channel"]               = 13;
+  JsonObject config = doc.createNestedObject("conf");
+  config["m"]                   = "24-EC-64-A1-A7-C4";
+  config["r"]                  = "-67";
+  config["c"]               = 13;
   
   serializeJson(doc, this->json_array);
   // Serial.println("Generando JSON");
