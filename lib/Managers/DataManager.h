@@ -17,10 +17,10 @@ class DataManager {
 public:
   DataManager();
   virtual ~DataManager();
-  void getPayload(char *payload[700]);
-  void getVariableData();
+  void getPayload(char *payload[700] = {0});
 
 private:
+  void getVariableData();
   long variables[MANAGER_SIZE];
   FactorySensorManager::TYPE_SENSOR_MANAGER managers[MANAGER_SIZE];
   FactorySensorManager *m_factoryManager;

@@ -17,8 +17,8 @@ class SoilTempManager : public SensorManager
 	float getData() { return DS18B20::getInstance()->getValue();}
 
   public:
-	SoilTempManager();
-	virtual ~SoilTempManager();
+	SoilTempManager(){};
+	virtual ~SoilTempManager(){};
 
 };
 #endif // !defined(EA_7DAEB1F8_E6A5_41b9_87ED_7E1729D2F294__INCLUDED_)

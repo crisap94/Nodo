@@ -21,7 +21,7 @@ private:
   }
 
 public:
-  BatteryStatusManager();
-  virtual ~BatteryStatusManager();
+  BatteryStatusManager(){};
+  virtual ~BatteryStatusManager(){};
 };
 #endif // !defined(EA_095E038F_1A20_4263_8C6C_645FD1958410__INCLUDED_)

@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "NTC.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 NTC *NTC::m_ntc = NULL;
 

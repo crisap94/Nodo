@@ -8,7 +8,7 @@
 #if !defined(EA_44F000DA_001B_4524_93EE_01CD0F97602E__INCLUDED_)
 #define EA_44F000DA_001B_4524_93EE_01CD0F97602E__INCLUDED_
 
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 class I2C {
 

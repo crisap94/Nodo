@@ -16,8 +16,8 @@ private:
   float getData() { return BME680::getInstance()->getPressure(); }
 
 public:
-  AtmosphericPressureManager();
-  virtual ~AtmosphericPressureManager();
+  AtmosphericPressureManager(){};
+  virtual ~AtmosphericPressureManager(){};
   
 };
 #endif // !defined(EA_DC90C153_EF45_4f12_B3A3_5238C844D31B__INCLUDED_)

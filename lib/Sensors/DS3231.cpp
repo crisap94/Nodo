@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "DS3231.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 DS3231 *DS3231::m_ds3231 = NULL;
 
@@ -19,7 +19,7 @@ DS3231::~DS3231(){
 }
 
 long DS3231::getValue(){
-	long epoch = 0;
+	long epoch = 123123122;
 	return epoch;
 }
 

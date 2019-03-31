@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "RT9013.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 RT9013 *RT9013::m_rt9013 = NULL;
 

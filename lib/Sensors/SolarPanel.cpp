@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "SolarPanel.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 SolarPanel *SolarPanel::m_solarPanel = NULL;
 

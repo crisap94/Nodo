@@ -6,23 +6,24 @@
 ///////////////////////////////////////////////////////////
 
 #include "BME680.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 BME680 *BME680::m_bme680 = NULL;
 
 /**
  * @brief Construct a new BME680::BME680 object
  * TODO Debug message constructing the BME680
- * 
+ * ú
  */
 BME680::BME680(){
-	
+	int seed = analogRead(A0);
+	randomSeed(seed);
 }
 
 /**
  * @brief Destroy the BME680::BME680 object
  * TODO Debug Message destroying the BME680
- * 
+ * ú
  */
 BME680::~BME680(){
 
@@ -38,26 +39,18 @@ void BME680::begin(){
 }
 
 float BME680::getHumidity(){
-	int seed = analogRead(A0);
-	randomSeed(seed);
 	float hum = random(80,90);
 	return hum;
 }
 float BME680::getTemperature(){
-	int seed = analogRead(A0);
-	randomSeed(seed);
-	float temp = random(29, 31);
+	float temp = random(29, 32);
 	return temp;
 }
 float BME680::getVOC(){
-	int seed = analogRead(A0);
-	randomSeed(seed);
 	float voc = random(600, 700);
 	return voc;
 }
 float BME680::getPressure(){
-	int seed = analogRead(A0);
-	randomSeed(seed);
 	float press = random(1000, 1020);
 	return press;
 }

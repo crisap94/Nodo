@@ -11,7 +11,6 @@
 #include "I2C.h"
 #include "Sensor.h"
 
-
 class BME680 : public Sensor, public I2C {
 private:
   int address;

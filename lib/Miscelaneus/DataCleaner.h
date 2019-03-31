@@ -9,7 +9,7 @@
 
 #define SMOOTHED_AVERAGE 1
 #define SMOOTHED_EXPONENTIAL 2
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 using namespace std;
 

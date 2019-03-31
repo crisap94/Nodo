@@ -16,8 +16,8 @@ class RelativeHumidityManager : public SensorManager
 	float getData() { return BME680::getInstance()->getHumidity(); }
 
   public:
-	RelativeHumidityManager();
-	virtual ~RelativeHumidityManager();
+	RelativeHumidityManager(){};
+	virtual ~RelativeHumidityManager(){};
 
 };
 #endif // !defined(EA_3B18B229_E80A_4713_9940_14738F496D33__INCLUDED_)

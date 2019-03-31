@@ -16,8 +16,8 @@ private:
   float getData() { return DS3231::getInstance()->getValue(); }
 
 public:
-  RTCManager();
-  virtual ~RTCManager();
+  RTCManager(){};
+  virtual ~RTCManager(){};
 
   long getCleanedData() { return getData(); }
 };

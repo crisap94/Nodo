@@ -20,7 +20,7 @@ private:
   }
 
 public:
-  BatteryTemperatureManager();
-  virtual ~BatteryTemperatureManager();
+  BatteryTemperatureManager(){};
+  virtual ~BatteryTemperatureManager(){};
 };
 #endif // !defined(EA_007B0A38_6270_4e01_81F3_1F29D846DBF9__INCLUDED_)

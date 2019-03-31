@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "CapacitiveSoilMoisture.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 CapacitiveSoilMoisture *CapacitiveSoilMoisture::m_CapacitiveSoilMoisture = NULL;
 

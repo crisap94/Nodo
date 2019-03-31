@@ -16,8 +16,8 @@ private:
   float getData() { return BME680::getInstance()->getTemperature(); }
 
 public:
-  AmbientTemperatureManager();
-  virtual ~AmbientTemperatureManager();
+  AmbientTemperatureManager() { };
+  virtual ~AmbientTemperatureManager(){};
 
 };
 #endif // !defined(EA_91FC7453_B35D_40f2_9F99_843A3DC23E5A__INCLUDED_)

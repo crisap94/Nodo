@@ -6,15 +6,15 @@
 ///////////////////////////////////////////////////////////
 
 #include "VEML6030.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 VEML6030 *VEML6030::m_veml6030 = NULL;
 
-VEML6030::VEML6030() {}
+VEML6030::VEML6030() { randomSeed(analogRead(A0)); }
 
 VEML6030::~VEML6030() {}
 
 float VEML6030::getValue() {
-  randomSeed(analogRead(A0));
+  
   return random(600, 700);
 }

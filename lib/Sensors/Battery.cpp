@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "Battery.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 Battery *Battery::m_battery = NULL;
 

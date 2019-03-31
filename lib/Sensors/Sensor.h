@@ -8,7 +8,7 @@
 #if !defined(EA_D734ED5C_255B_4b2c_90F6_07671D362DDD__INCLUDED_)
 #define EA_D734ED5C_255B_4b2c_90F6_07671D362DDD__INCLUDED_
 
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 class Sensor {
 

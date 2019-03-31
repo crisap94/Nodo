@@ -21,8 +21,8 @@ private:
   }
 
 public:
-  SolarPanelVoltajeManager();
-  virtual ~SolarPanelVoltajeManager();
+  SolarPanelVoltajeManager(){};
+  virtual ~SolarPanelVoltajeManager(){};
 
 };
 #endif // !defined(EA_657FA90A_7FCB_4a34_9758_59AECF8ADE25__INCLUDED_)

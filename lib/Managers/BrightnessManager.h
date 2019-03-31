@@ -16,8 +16,8 @@ private:
   float getData() { return VEML6030::getInstance()->getValue(); }
 
 public:
-  BrightnessManager();
-  virtual ~BrightnessManager();
+  BrightnessManager(){};
+  virtual ~BrightnessManager(){};
   
 };
 #endif // !defined(EA_4C6157B0_482A_4599_B030_A5B6AED6E71A__INCLUDED_)

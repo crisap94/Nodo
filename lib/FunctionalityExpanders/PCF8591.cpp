@@ -6,12 +6,12 @@
 ///////////////////////////////////////////////////////////
 
 #include "PCF8591.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 
 PCF8591 *PCF8591::m_pcf8591 = NULL;
 
-PCF8591::PCF8591() {}
+PCF8591::PCF8591() { randomSeed(analogRead(A0)); }
 
 PCF8591::~PCF8591() {}
 
@@ -21,7 +21,6 @@ void PCF8591::begin(){
 
 float PCF8591::getValue(PCF8591::PIN _pin) {
   float value = -1;
-  randomSeed(analogRead(A0));
   switch (_pin) {
   case PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE:
     value = random(100, 110);

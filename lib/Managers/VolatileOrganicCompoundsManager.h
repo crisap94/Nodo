@@ -17,7 +17,7 @@ private:
   float getData() { return BME680::getInstance()->getVOC(); }
 
 public:
-  VolatileOrganicCompoundsManager();
-  virtual ~VolatileOrganicCompoundsManager();
+  VolatileOrganicCompoundsManager(){};
+  virtual ~VolatileOrganicCompoundsManager(){};
 };
 #endif // !defined(EA_DB6E1206_39DD_4472_9043_07339B6F4784__INCLUDED_)

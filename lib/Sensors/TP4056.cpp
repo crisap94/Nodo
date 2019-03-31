@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "TP4056.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 
 TP4056 *TP4056::m_tp4056 = NULL;
 

@@ -20,8 +20,8 @@ private:
   }
 
 public:
-  BatteryVoltajeManager();
-  virtual ~BatteryVoltajeManager();
+  BatteryVoltajeManager(){};
+  virtual ~BatteryVoltajeManager(){};
 
 };
 #endif // !defined(EA_9C5C0B8D_638C_4425_9863_098FE76689FD__INCLUDED_)

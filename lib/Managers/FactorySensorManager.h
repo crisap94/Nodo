@@ -8,7 +8,7 @@
 #if !defined(EA_6BFF658B_B0A6_4437_B8D6_A5614E83D114__INCLUDED_)
 #define EA_6BFF658B_B0A6_4437_B8D6_A5614E83D114__INCLUDED_
 
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 #include "SensorManager.h"
 
 class FactorySensorManager {
@@ -31,7 +31,7 @@ public:
   };
   FactorySensorManager();
   virtual ~FactorySensorManager();
-
+  SensorManager *m_sensorManager;
   SensorManager *createManager(TYPE_SENSOR_MANAGER type);
 };
 #endif // !defined(EA_6BFF658B_B0A6_4437_B8D6_A5614E83D114__INCLUDED_)

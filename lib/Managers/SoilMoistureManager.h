@@ -16,8 +16,8 @@ private:
   float getData() { return CapacitiveSoilMoisture::getInstance()->getValue(); }
 
 public:
-  SoilMoistureManager();
-  virtual ~SoilMoistureManager();
+  SoilMoistureManager(){};
+  virtual ~SoilMoistureManager(){};
 
 };
 #endif // !defined(EA_088A5508_F756_464c_A1D8_5F1A49FC14D7__INCLUDED_)

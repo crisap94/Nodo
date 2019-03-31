@@ -6,7 +6,7 @@
 ///////////////////////////////////////////////////////////
 
 #include "DataManager.h"
-#include "Arduino.h"
+#include "ESP8266WiFi.h"
 #include "ArduinoJson.h"
 #include "FactorySensorManager.h"
 
@@ -34,15 +34,19 @@ DataManager::DataManager()
 DataManager::~DataManager() {}
 
 void DataManager::getVariableData() {
+  SensorManager *m_sensorManager;
   for (int manager = 0; manager < MANAGER_SIZE; manager++) {
-    m_factoryManager->createManager(this->managers[manager])
-        ->getCleanedData([&](long data) -> void { variables[manager] = data; });
+    m_sensorManager = m_factoryManager->createManager(this->managers[manager]);
+    m_sensorManager->getCleanedData([&](long data) -> void { variables[manager] = data; });
+    delete m_sensorManager;
   }
+  yield();
 }
 
 void DataManager::getPayload(char *json_array[700]) {
-  const size_t capacity = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) +
-                          JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(13);
+  getVariableData();
+  
+  const size_t capacity = 700;
   DynamicJsonDocument doc(capacity);
 
   JsonObject data = doc.createNestedObject("data");
@@ -74,5 +78,5 @@ void DataManager::getPayload(char *json_array[700]) {
 
   char payload[capacity];
   serializeJson(doc, payload);
-  strcpy_P(*json_array, payload);
+  Serial.println("Generando JSON");
 }
