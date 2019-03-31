@@ -43,10 +43,10 @@ void DataManager::getVariableData() {
   yield();
 }
 
-void DataManager::getPayload(char *json_array[700]) {
+void DataManager::getPayload() {
   getVariableData();
-  
-  const size_t capacity = 700;
+
+  const size_t capacity = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(13);
   DynamicJsonDocument doc(capacity);
 
   JsonObject data = doc.createNestedObject("data");
@@ -76,7 +76,12 @@ void DataManager::getPayload(char *json_array[700]) {
   config["rssi"]                  = "-67";
   config["channel"]               = 13;
 
-  char payload[capacity];
-  serializeJson(doc, payload);
+  serializeJson(doc, this->json_array);
   Serial.println("Generando JSON");
 }
+
+char* DataManager::getJSON(){
+  getPayload();
+
+  return json_array;
+} 
