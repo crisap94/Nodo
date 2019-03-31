@@ -21,8 +21,8 @@ Task myLoggingTask(5000, TASK_FOREVER, []() {
 
   
   String json = m_dataManager->getJSON();
-  
-  Serial.println(json);
+
+  Serial.println("Sending JSON");
   if (logServerId == 0) // If we don't know the logServer yet
     mesh.sendBroadcast(json);
   else
