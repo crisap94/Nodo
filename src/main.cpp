@@ -16,7 +16,10 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <painlessMesh.h>
+
 #include <ArduinoJson.h>
+
+#include <DataManager.h>
 
 #define MESH_PREFIX "smava"
 #define MESH_PASSWORD "smava1234"
@@ -40,8 +43,9 @@ painlessMesh mesh;
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 Scheduler userScheduler; // to control your personal task
+DataManager *m_dataManager;
 
-Task logServerTask(10000, TASK_FOREVER, []() {
+Task logServerTask(TASK_SECOND * 15, TASK_FOREVER, []() {
   const size_t capacity = JSON_OBJECT_SIZE(2);
   DynamicJsonDocument doc(capacity);
 
@@ -54,16 +58,19 @@ Task logServerTask(10000, TASK_FOREVER, []() {
   mesh.sendBroadcast(str);
 });
 
+Task sensingTask(TASK_SECOND * 5, TASK_FOREVER, []() {
+  String json = m_dataManager->getJSON();
+  mqttClient.publish("painlessMesh/from/gateway", json.c_str());
+});
+
 void setup() {
   Serial.begin(115200);
   mqttClient.setClient(wifiClient);
   mqttClient.setServer(mqttBroker, 1883);
   mqttClient.setCallback(mqttCallback);
 
-  mesh.setDebugMsgTypes(
-      ERROR | STARTUP |
-      CONNECTION); // set before init() so that you can see startup messages
-
+  // mesh.setDebugMsgTypes(ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE | DEBUG); // set before init() so that you can see startup messages
+  mesh.setDebugMsgTypes(ERROR | CONNECTION | MSG_TYPES | REMOTE | DEBUG);
   // Channel set to 6. Make sure to use the same channel for your mesh and for
   // you other
   // network (STATION_SSID)
@@ -73,7 +80,10 @@ void setup() {
   mesh.stationManual(STATION_SSID, STATION_PASSWORD);
   mesh.setHostname(HOSTNAME);
 
+  m_dataManager = new DataManager();
+
   userScheduler.addTask(logServerTask);
+  userScheduler.addTask(sensingTask);
   logServerTask.enable();
 }
 

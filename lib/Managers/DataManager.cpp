@@ -77,10 +77,9 @@ void DataManager::getPayload() {
   config["channel"]               = 13;
 
   serializeJson(doc, this->json_array);
-  Serial.println("Generando JSON");
 }
 
-char* DataManager::getJSON(){
+String DataManager::getJSON(){
   getPayload();
 
   return json_array;
