@@ -2,8 +2,8 @@
 #include "painlessMesh.h"
 #include "DataManager.h"
 
-#define MESH_PREFIX "whateverYouLike"
-#define MESH_PASSWORD "somethingSneaky"
+#define MESH_PREFIX "smava"
+#define MESH_PASSWORD "smava1234"
 #define MESH_PORT 5555
 
 Scheduler userScheduler; // to control your personal task
