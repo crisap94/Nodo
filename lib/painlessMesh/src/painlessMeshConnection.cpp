@@ -540,8 +540,8 @@ void ICACHE_FLASH_ATTR MeshConnection::handleMessage(String &buffer, uint32_t re
     staticThis->debugMsg(COMMUNICATION, "meshRecvCb(): Recvd from %u-->%s<--\n", this->nodeId, buffer.c_str());
 
 #if ARDUINOJSON_VERSION_MAJOR==6
-    DynamicJsonDocument jsonBuffer(512);
-    DeserializationError error = deserializeJson(jsonBuffer, buffer, DeserializationOption::NestingLimit(511));
+    DynamicJsonDocument jsonBuffer(256);
+    DeserializationError error = deserializeJson(jsonBuffer, buffer, DeserializationOption::NestingLimit(255));
     if (error) {
         staticThis->debugMsg(ERROR, "meshRecvCb(): parseObject() failed. total_length=%d, data=%s<--\n", buffer.length(), buffer.c_str());
         return;
@@ -549,7 +549,7 @@ void ICACHE_FLASH_ATTR MeshConnection::handleMessage(String &buffer, uint32_t re
     JsonObject root = jsonBuffer.as<JsonObject>();
 #else
     DynamicJsonBuffer jsonBuffer;
-    JsonObject& root = jsonBuffer.parseObject(buffer.c_str(), 511    if (!root.success()) {   // Test if parsing succeeded.
+    JsonObject& root = jsonBuffer.parseObject(buffer.c_str(), 255 if (!root.success()) {   // Test if parsing succeeded.
         staticThis->debugMsg(ERROR, "meshRecvCb(): parseObject() failed. total_length=%d, data=%s<--\n", buffer.length(), buffer.c_str());
         return;
     }
