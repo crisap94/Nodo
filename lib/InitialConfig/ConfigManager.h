@@ -19,7 +19,6 @@ public:
 	void getInitialConfigData();
 	bool isConfig();
 	void reset();
-	runMesh();
 
 };
 #endif // !defined(EA_11E06D4D_4D21_4530_9700_8484EA67C5A8__INCLUDED_)
