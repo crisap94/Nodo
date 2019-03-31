@@ -17,10 +17,11 @@ size_t logServerId = 0;
 
 // Send message to the logServer every 10 seconds
 Task myLoggingTask(10000, TASK_FOREVER, []() {
+  String json = String(m_dataManager->getJSON());
   if (logServerId == 0) // If we don't know the logServer yet
-    mesh.sendBroadcast(m_dataManager->getJSON());
+    mesh.sendBroadcast(json);
   else
-    mesh.sendSingle(logServerId, str);
+    mesh.sendSingle(logServerId, json);
 });
 
 void setup() {
