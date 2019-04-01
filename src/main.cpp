@@ -104,10 +104,10 @@ void loop() {
   client.loop();
 
   long now = millis();
-  if (now - lastMsg > 5000) {
+  if (now - lastMsg > 5*60*1000) {
     lastMsg = now;
     ++value;
     String json = String(m_dataManager->getJSON());
-    client.publish("json", json.c_str(), plenght);
+    client.publish("A1", json.c_str(), plenght);
   }
 }

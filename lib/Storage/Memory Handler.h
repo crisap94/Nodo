@@ -8,15 +8,14 @@
 #if !defined(EA_F903AFE1_AC87_4a42_924B_147B98054043__INCLUDED_)
 #define EA_F903AFE1_AC87_4a42_924B_147B98054043__INCLUDED_
 
-class Memory Handler
+class MemoryHandler
 {
 
 public:
-	Memory Handler();
-	virtual ~Memory Handler();
+	MemoryHandler();
+	virtual ~MemoryHandler();
 
 	bool anyData();
-	saveData(char payload);
 
 };
 #endif // !defined(EA_F903AFE1_AC87_4a42_924B_147B98054043__INCLUDED_)

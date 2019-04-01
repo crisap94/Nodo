@@ -16,8 +16,8 @@ BME680 *BME680::m_bme680 = NULL;
  * ú
  */
 BME680::BME680(){
-	int seed = analogRead(A0);
-	randomSeed(seed);
+
+        randomSeed(micros());
 }
 
 /**

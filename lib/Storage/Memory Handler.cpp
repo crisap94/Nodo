@@ -8,26 +8,12 @@
 #include "Memory Handler.h"
 
 
-Memory Handler::Memory Handler(){
+MemoryHandler::MemoryHandler(){
 
 }
 
 
 
-Memory Handler::~Memory Handler(){
-
-}
-
-
-
-
-
-bool Memory Handler::anyData(){
-
-	return false;
-}
-
-
-Memory Handler::saveData(char payload){
+MemoryHandler::~MemoryHandler(){
 
 }
