@@ -1,14 +1,16 @@
 #include "ESP8266WiFi.h"
-
+#include "ConfigManager.h"
 #include "DataManager.h"
 
 DataManager *m_dataManager;
+ConfigManager *m_configManager;
 
 void setup() {
   Serial.begin(115200);
   delay(2000);
 
   m_dataManager = new DataManager();
+  m_configManager = new ConfigManager();
 }
 
 void loop() {

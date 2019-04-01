@@ -6,9 +6,14 @@
 ///////////////////////////////////////////////////////////
 
 #include "DataManager.h"
+
 #include "ESP8266WiFi.h"
+
 #include "ArduinoJson.h"
+
 #include "FactorySensorManager.h"
+
+#include "FS.h"
 
 DataManager::DataManager()
     : managers{
@@ -62,13 +67,13 @@ void DataManager::getPayload() {
   data["timestamp"]               = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::EPOCH];
 
   JsonObject data_gps = data.createNestedObject("gps");
-  data_gps["latitude"]            = "10.399080";
-  data_gps["longitude"]           = "-75.504142";
+  data_gps["latitude"]            = this->lat;
+  data_gps["longitude"]           = this->lon;
 
   data["batteryVoltaje"]          = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BATT_VOLTAJE];
   data["batteryTmeperature"]      = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::BATT_TEMPERATURE];
 
-  doc["zoneId"]                   = "5ac012583e194204e0afef6b";
+  doc["zoneId"]                   = this->zoneId;
   doc["firmwareVersion"]          = "V1.0";
 
   JsonObject config = doc.createNestedObject("config");
@@ -85,3 +90,29 @@ String DataManager::getJSON(){
 
   return json_array;
 } 
+
+void DataManager::loadConfig(){
+  File configFile = SPIFFS.open("/config.json", "r");
+
+  size_t size = configFile.size();
+
+
+  // Asigne un buffer para almacenar el contenido del archivo.
+  std::unique_ptr<char[]> buf(new char[size]);
+
+  // No usamos String aquí porque la biblioteca ArduinoJson requiere la entrada
+  // buffer para ser mutable Si no usas ArduinoJson, también puedes
+  // use configFile.readString en su lugar.
+  configFile.readBytes(buf.get(), size);
+
+  const size_t capacity = 2 * JSON_OBJECT_SIZE(2) + 50;
+  DynamicJsonDocument doc(capacity);
+
+  deserializeJson(doc, buf.get());
+
+  const char* zoneid = doc["zoneId"]; // "asdasdasdasdasdsadasd"
+  this->zoneId = String(zoneid);
+
+  this->lat = doc["gps"]["lat"]; // 12.123123
+  this->lon = doc["gps"]["lon"]; // 23.123123
+}

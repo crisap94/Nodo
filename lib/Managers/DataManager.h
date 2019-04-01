@@ -20,6 +20,10 @@ public:
   String getJSON();
 
 private:
+  String zoneId;
+  unsigned int lon;
+  unsigned int lat;
+  void loadConfig();
   void getPayload();
   String json_array;
   void getVariableData();
