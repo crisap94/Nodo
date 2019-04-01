@@ -40,7 +40,7 @@ void DataManager::getVariableData() {
     m_sensorManager->getCleanedData([&](long data) -> void { variables[manager] = data; });
     delete m_sensorManager;
   }
-  yield();
+    yield();
 }
 
 void DataManager::getPayload() {
@@ -72,15 +72,15 @@ void DataManager::getPayload() {
   doc["firmwareVersion"]          = "V1.0";
 
   JsonObject config = doc.createNestedObject("config");
-  config["mac"]                   = "24-EC-64-A1-A7-C4";
-  config["rssi"]                  = "-67";
-  config["channel"]               = 13;
+  config["mac"]                   = WiFi.macAddress();
+  config["rssi"]                  = WiFi.RSSI(0);
+  config["channel"]               = WiFi.channel();
 
   serializeJson(doc, this->json_array);
-  Serial.println("Generando JSON");
+
 }
 
-char* DataManager::getJSON(){
+String DataManager::getJSON(){
   getPayload();
 
   return json_array;

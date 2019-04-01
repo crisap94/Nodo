@@ -17,11 +17,11 @@ class DataManager {
 public:
   DataManager();
   virtual ~DataManager();
-  char *getJSON();
+  String getJSON();
 
 private:
   void getPayload();
-  char json_array[700];
+  String json_array;
   void getVariableData();
   long variables[MANAGER_SIZE];
   FactorySensorManager::TYPE_SENSOR_MANAGER managers[MANAGER_SIZE];
