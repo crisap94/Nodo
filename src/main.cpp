@@ -23,10 +23,8 @@ Task myLoggingTask(5000, TASK_FOREVER, []() {
   Serial.println(json); */
 
   String broadcast = "BROADCASTINGGGGGG";
-  String srvr = "{\"data\":{\"te\":30,\"h\":88,\"sH\":1,\"p\":1015,\"u\":603,\"b\":618,\"sT\":25,\"v\":651,\"pV\":1,\"ti\":123123120,\"gps\":{\"lat\":\"10.399080\",\"lon\":\"-75.504142\"},\"bV\":1,\"bT\":1},\"zI\":\"5ac012583e194204e0afef6b\",\"fV\":\"V1.0\",\"conf\":{\"m\":\"24-EC-64-A1-A7-C4\",\"r\":\"-67\",\"c\":13}}";
-  // String srvr = "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll";
-  // String srvr = "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll";
-  // String srvr = "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll";
+  
+  String srvr = "{\"test\":\"Prueba\"}";
   if (logServerId == 0) // If we don't know the logServer yet
     mesh.sendBroadcast(broadcast);
   else
