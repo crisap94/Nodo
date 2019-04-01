@@ -15,9 +15,20 @@ BME680 *BME680::m_bme680 = NULL;
  * TODO Debug message constructing the BME680
  * ú
  */
-BME680::BME680(){
-	int seed = analogRead(A0);
-	randomSeed(seed);
+BME680::BME680() {
+
+  this->address = 0x77;
+
+  if (!this->bme.begin()) {
+    Serial.println("Could not find a valid BME680 sensor, check wiring!");
+  }
+
+  // Set up oversampling and filter initialization
+  this->bme.setTemperatureOversampling(BME680_OS_8X);
+  this->bme.setHumidityOversampling(BME680_OS_2X);
+  this->bme.setPressureOversampling(BME680_OS_4X);
+  this->bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+  this->bme.setGasHeater(320, 150); // 320*C for 150 ms
 }
 
 /**
@@ -25,32 +36,25 @@ BME680::BME680(){
  * TODO Debug Message destroying the BME680
  * ú
  */
-BME680::~BME680(){
+BME680::~BME680() {}
 
+float BME680::getHumidity() {
+  this->bme.performReading();
+  return this->bme.humidity;
 }
-
-/**
- * * Initilize the Sensor
- * TODO Implement Wire to Initilize the I2C BUS
- * 
- */
-void BME680::begin(){
-
+float BME680::getTemperature() {
+  this->bme.performReading();
+  return this->bme.temperature;
 }
-
-float BME680::getHumidity(){
-	float hum = random(80,90);
-	return hum;
+float BME680::getVOC() {
+  this->bme.performReading();
+  return this->bme.gas_resistance / 1000.0;
 }
-float BME680::getTemperature(){
-	float temp = random(29, 32);
-	return temp;
+float BME680::getPressure() {
+  this->bme.performReading();
+  return this->bme.pressure / 100.0;
 }
-float BME680::getVOC(){
-	float voc = random(600, 700);
-	return voc;
-}
-float BME680::getPressure(){
-	float press = random(1000, 1020);
-	return press;
+float BME680::getAltitude() {
+  this->bme.performReading();
+  return this->bme.readAltitude(SEALEVELPRESSURE_HPA);
 }

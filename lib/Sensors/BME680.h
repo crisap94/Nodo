@@ -8,14 +8,20 @@
 #if !defined(EA_85488350_1724_4f47_A6CC_CD220A1288EC__INCLUDED_)
 #define EA_85488350_1724_4f47_A6CC_CD220A1288EC__INCLUDED_
 
-#include "I2C.h"
+#include <Wire.h>
+
 #include "Sensor.h"
 
-class BME680 : public Sensor, public I2C {
+#include <Adafruit_Sensor.h>
+
+#include "Adafruit_BME680.h"
+
+#define SEALEVELPRESSURE_HPA (1013.25)
+
+class BME680 : public Sensor{
 private:
   int address;
-  int scl;
-  int sda;
+  Adafruit_BME680 bme;
   static BME680 *m_bme680;
 
   BME680();
@@ -29,10 +35,10 @@ public:
     return m_bme680;
   }
 
-  void begin();
   float getHumidity();
   float getTemperature();
   float getVOC();
   float getPressure();
+  float getAltitude();
 };
 #endif // !defined(EA_85488350_1724_4f47_A6CC_CD220A1288EC__INCLUDED_)
