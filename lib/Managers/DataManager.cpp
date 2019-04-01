@@ -72,9 +72,9 @@ void DataManager::getPayload() {
   doc["firmwareVersion"]          = "V1.0";
 
   JsonObject config = doc.createNestedObject("config");
-  config["mac"]                   = "24-EC-64-A1-A7-C4";
-  config["rssi"]                  = "-67";
-  config["channel"]               = 13;
+  config["mac"]                   = WiFi.macAddress();
+  config["rssi"]                  = WiFi.RSSI();
+  config["channel"]               = WiFi.channel();
 
   serializeJson(doc, this->json_array);
   Serial.println(this->json_array);
