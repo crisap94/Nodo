@@ -9,6 +9,7 @@
 #define EA_542022A9_4749_4b6e_BA6F_80DFB9BB0B34__INCLUDED_
 
 #include "FactorySensorManager.h"
+#include "RtcDateTime.h"
 
 #define MANAGER_SIZE 13
 
@@ -20,15 +21,25 @@ public:
   String getJSON();
 
 private:
+  String json_array;
+
   String zoneId;
+  String topic;
+  RtcDateTime *m_now;
   unsigned int lon;
   unsigned int lat;
+
   void loadConfig();
+
   void getPayload();
-  String json_array;
+
+
   void getVariableData();
+
   long variables[MANAGER_SIZE];
+
   FactorySensorManager::TYPE_SENSOR_MANAGER managers[MANAGER_SIZE];
+  
   FactorySensorManager *m_factoryManager;
 };
 #endif // !defined(EA_542022A9_4749_4b6e_BA6F_80DFB9BB0B34__INCLUDED_)

@@ -34,6 +34,8 @@ DataManager::DataManager()
   for (size_t manager = 0; manager < MANAGER_SIZE; manager++) {
     this->variables[manager] = -1;
   }
+
+  loadConfig();
 }
 
 DataManager::~DataManager() {}
@@ -105,14 +107,27 @@ void DataManager::loadConfig(){
   // use configFile.readString en su lugar.
   configFile.readBytes(buf.get(), size);
 
-  const size_t capacity = 2 * JSON_OBJECT_SIZE(2) + 50;
+  const size_t capacity = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(6) + 110;
   DynamicJsonDocument doc(capacity);
 
   deserializeJson(doc, buf.get());
 
-  const char* zoneid = doc["zoneId"]; // "asdasdasdasdasdsadasd"
-  this->zoneId = String(zoneid);
+  const char *zoneid = doc["zoneId"]; // "asdasdasdasdasdsadasd"
+  const char *topic = doc["topic"];   // "1234"
 
-  this->lat = doc["gps"]["lat"]; // 12.123123
-  this->lon = doc["gps"]["lon"]; // 23.123123
+  this->zoneId = String(zoneid);
+  this->topic = String(topic);
+
+   this->lat = doc["gps"]["lat"]; // 12.123123
+   this->lon = doc["gps"]["lon"]; // 23.123123
+
+  JsonObject time = doc["time"];
+  int time_hour = time["hour"];     // 23
+  int time_minute = time["minute"]; // 12
+  int time_second = time["second"]; // 12
+  int time_year = time["year"];     // 1234
+  int time_month = time["month"];   // 12
+  int time_day = time["day"];       // 12
+
+  this->m_now = new RtcDateTime(time_year,time_month,time_day,time_hour,time_minute,time_second);
 }

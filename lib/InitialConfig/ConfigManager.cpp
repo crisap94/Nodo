@@ -26,12 +26,12 @@ void ConfigManager::connectGPSServer() {
     Serial.print("Connecting..");
   }
   Serial.println("Conneced");
-  Serial.println("Local IP" + String(WiFi.localIP()));
-  Serial.println("Gateway IP" + String(WiFi.gatewayIP()));
+  Serial.println("Local IP" + WiFi.localIP().toString());
+  Serial.println("Gateway IP" + WiFi.gatewayIP().toString());
 }
 
 void ConfigManager::getInitialConfigData() {
-  String url = "http://" + String(WiFi.gatewayIP());
+  String url = "http://" + WiFi.gatewayIP().toString();
 
   this->http->begin(url);
 
@@ -39,22 +39,41 @@ void ConfigManager::getInitialConfigData() {
   String payload;
   if (httpCode == 0) { // Check the returning code
 
-    payload =  this->http->getString(); 
-    Serial.println(payload);     // Print the response payload
+    payload = this->http->getString();
+    Serial.println(payload); // Print the response payload
   }
 
   this->http->end();
 
-  const size_t capacity = 2 * JSON_OBJECT_SIZE(2) + 50;
+  const size_t capacity =
+      JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(6) + 110;
   DynamicJsonDocument doc(capacity);
 
   deserializeJson(doc, payload.c_str());
 
-  File configFile = SPIFFS.open("/config.json", "w");
-  if (!configFile) {
-    Serial.println("Error al abrir el archivo de configuración para escribir");
+  const char *zoneId = doc["zoneId"]; // "asdasdasdasdasdsadasd"
+  const char *topic = doc["topic"];   // "1234"
+
+  float gps_lat = doc["gps"]["lat"]; // 12.123123
+  float gps_lon = doc["gps"]["lon"]; // 23.123123
+
+  JsonObject time = doc["time"];
+  int time_year = time["year"];     // 1234
+  int time_month = time["month"];   // 12
+  int time_day = time["day"];       // 12
+  int time_hour = time["hour"];     // 23
+  int time_minute = time["minute"]; // 12
+  int time_second = time["second"]; // 12
+
+  if (gps_lat != 0 && gps_lon != 0) {
+    File configFile = SPIFFS.open("/config.json", "w");
+    if (!configFile) {
+      Serial.println(
+          "Error al abrir el archivo de configuración para escribir");
+    }
+    serializeJson(doc, configFile);
+    reset();
   }
-  serializeJson(doc, configFile);
 }
 
 bool ConfigManager::isConfig() {
