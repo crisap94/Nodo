@@ -10,7 +10,7 @@
 
 DS18B20 *DS18B20::m_ds18b20 = NULL;
 
-DS18B20::DS18B20() { randomSeed(analogRead(A0)); }
+DS18B20::DS18B20() { randomSeed(micros()); }
 
 DS18B20::~DS18B20(){
 

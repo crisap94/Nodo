@@ -10,7 +10,7 @@
 
 VEML6030 *VEML6030::m_veml6030 = NULL;
 
-VEML6030::VEML6030() { randomSeed(analogRead(A0)); }
+VEML6030::VEML6030() { randomSeed(micros()); }
 
 VEML6030::~VEML6030() {}
 

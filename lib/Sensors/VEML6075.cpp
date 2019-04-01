@@ -10,11 +10,11 @@
 
 VEML6075 *VEML6075::m_veml6075 = NULL;
 
-VEML6075::VEML6075() { randomSeed(analogRead(A0)); }
+VEML6075::VEML6075() { randomSeed(micros()); }
 
 VEML6075::~VEML6075() {}
 
 float VEML6075::getValue() {
   
-  return random(600, 700);
+  return random(1, 2);
 }

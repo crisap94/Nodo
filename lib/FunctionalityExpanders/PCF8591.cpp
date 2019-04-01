@@ -11,7 +11,7 @@
 
 PCF8591 *PCF8591::m_pcf8591 = NULL;
 
-PCF8591::PCF8591() { randomSeed(analogRead(A0)); }
+PCF8591::PCF8591() { randomSeed(micros()); }
 
 PCF8591::~PCF8591() {}
 
