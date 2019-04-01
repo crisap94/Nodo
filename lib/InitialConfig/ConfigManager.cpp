@@ -31,7 +31,7 @@ void ConfigManager::connectGPSServer() {
 }
 
 void ConfigManager::getInitialConfigData() {
-  String url = "http://" + WiFi.gatewayIP().toString();
+  String url = "http://" + WiFi.gatewayIP().toString() + "/smava";
 
   this->http->begin(url);
 
