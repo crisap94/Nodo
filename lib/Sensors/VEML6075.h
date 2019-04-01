@@ -8,15 +8,16 @@
 #if !defined(EA_9379FF0E_1B64_4869_B859_4ADF835D3B39__INCLUDED_)
 #define EA_9379FF0E_1B64_4869_B859_4ADF835D3B39__INCLUDED_
 
-#include "I2C.h"
 #include "Sensor.h"
 
+#include <Wire.h>
 
-class VEML6075 : public Sensor, public I2C {
+#include "Adafruit_VEML6075.h"
+
+class VEML6075 : public Sensor{
 private:
   int address;
-  int scl;
-  int sda;
+  Adafruit_VEML6075 *uv;;
   static VEML6075 *m_veml6075;
 
   VEML6075();
