@@ -81,7 +81,6 @@ void setup() {
   mesh.setHostname(HOSTNAME);
 
   m_dataManager = new DataManager();
-
   userScheduler.addTask(logServerTask);
   userScheduler.addTask(sensingTask);
   logServerTask.enable();
