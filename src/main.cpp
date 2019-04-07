@@ -58,6 +58,19 @@ Task logServerTask(TASK_SECOND * 15, TASK_FOREVER, []() {
   mesh.sendBroadcast(str);
 });
 
+Task mqttConnectionConfiguration(0, TASK_ONCE, []() {
+  if (myIP != getlocalIP()) {
+    myIP = getlocalIP();
+    Serial.println("My IP is " + myIP.toString());
+
+    if (mqttClient.connect("painlessMeshClient", "smava", "12345678")) {
+      Serial.println("Connected to Broker");
+      mqttClient.publish("painlessMesh/from/gateway", "Ready!");
+      mqttClient.subscribe("painlessMesh/to/#");
+    }
+  }
+});
+
 Task sensingTask(TASK_SECOND * 5, TASK_FOREVER, []() {
   String json = m_dataManager->getJSON();
   mqttClient.publish("painlessMesh/from/gateway", json.c_str());
@@ -69,7 +82,9 @@ void setup() {
   mqttClient.setServer(mqttBroker, 1883);
   mqttClient.setCallback(mqttCallback);
 
-  // mesh.setDebugMsgTypes(ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE | DEBUG); // set before init() so that you can see startup messages
+  // mesh.setDebugMsgTypes(ERROR | MESH_STATUS | CONNECTION | SYNC |
+  // COMMUNICATION | GENERAL | MSG_TYPES | REMOTE | DEBUG); // set before init()
+  // so that you can see startup messages
   mesh.setDebugMsgTypes(ERROR | CONNECTION | MSG_TYPES | REMOTE | DEBUG);
   // Channel set to 6. Make sure to use the same channel for your mesh and for
   // you other
@@ -83,24 +98,15 @@ void setup() {
   m_dataManager = new DataManager();
   userScheduler.addTask(logServerTask);
   userScheduler.addTask(sensingTask);
+  userScheduler.addTask(mqttConnectionConfiguration);
   logServerTask.enable();
 }
 
 void loop() {
+
   mesh.update();
   mqttClient.loop();
   userScheduler.execute(); // it will run mesh scheduler as well
-
-  if (myIP != getlocalIP()) {
-    myIP = getlocalIP();
-    Serial.println("My IP is " + myIP.toString());
-
-    if (mqttClient.connect("painlessMeshClient", "smava", "12345678")) {
-      Serial.println("Connected to Broker");
-      mqttClient.publish("painlessMesh/from/gateway", "Ready!");
-      mqttClient.subscribe("painlessMesh/to/#");
-    }
-  }
 }
 
 void receivedCallback(const uint32_t &from, const String &msg) {
