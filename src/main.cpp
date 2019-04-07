@@ -1,6 +1,9 @@
 #include "ESP8266WiFi.h"
+
 #include "painlessMesh.h"
+
 #include "DataManager.h"
+
 #include "ArduinoJson.h"
 
 #define MESH_PREFIX "smava"
@@ -18,26 +21,29 @@ size_t logServerId = 0;
 
 // Send message to the logServer every 10 seconds
 Task myLoggingTask(5000, TASK_FOREVER, []() {
-/*   String json = m_dataManager->getJSON();
+  String json = m_dataManager->getJSON();
 
-  Serial.println(json); */
+  Serial.println(json);
 
   String broadcast = "BROADCASTINGGGGGG";
-  
-  String srvr = "{\"test\":\"Prueba\"}";
+
+  String srvr = json;
   if (logServerId == 0) // If we don't know the logServer yet
     mesh.sendBroadcast(broadcast);
   else
     mesh.sendSingle(logServerId, srvr);
 });
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
 
   m_dataManager = new DataManager();
 
-  mesh.setDebugMsgTypes(ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION /* | GENERAL */ | MSG_TYPES | REMOTE); // set before init() so that you can see startup messages
+  // mesh.setDebugMsgTypes(ERROR | MESH_STATUS | CONNECTION | SYNC |
+  // COMMUNICATION /* | GENERAL */ | MSG_TYPES | REMOTE); // set before init()
+  // so that you can see startup messages
+  mesh.setDebugMsgTypes(
+      COMMUNICATION); // set before init() so that you can see startup messages
 
   mesh.init(MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT, WIFI_AP_STA,
             6);
@@ -50,15 +56,12 @@ void setup()
   myLoggingTask.enable();
 }
 
-void loop()
-{
+void loop() {
   userScheduler.execute(); // it will run mesh scheduler as well
   mesh.update();
-  
 }
 
-void receivedCallback(uint32_t from, String &msg)
-{
+void receivedCallback(uint32_t from, String &msg) {
   Serial.printf("logClient: Received from %u msg=%s\n", from, msg.c_str());
 
   const size_t capacity = JSON_OBJECT_SIZE(2) + 30;
@@ -66,10 +69,8 @@ void receivedCallback(uint32_t from, String &msg)
 
   deserializeJson(doc, msg);
 
-  if (doc.containsKey("topic"))
-  {
-    if (String("logServer").equals(doc["topic"].as<String>()))
-    {
+  if (doc.containsKey("topic")) {
+    if (String("logServer").equals(doc["topic"].as<String>())) {
       // check for on: true or false
       logServerId = doc["nodeId"];
       Serial.printf("logServer detected!!!\n");
