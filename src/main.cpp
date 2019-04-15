@@ -20,14 +20,14 @@ void receivedCallback(uint32_t from, String &msg);
 size_t logServerId = 0;
 
 // Send message to the logServer every 10 seconds
-Task myLoggingTask(5000, TASK_FOREVER, []() {
-  String json = m_dataManager->getJSON();
+Task myLoggingTask(TASK_SECOND * 5, TASK_FOREVER, []() {
+  /*   String json = m_dataManager->getJSON();
 
-  Serial.println(json);
+    Serial.println(json); */
 
   String broadcast = "BROADCASTINGGGGGG";
 
-  String srvr = json;
+  String srvr = "{\"test\":\"Prueba\"}";
   if (logServerId == 0) // If we don't know the logServer yet
     mesh.sendBroadcast(broadcast);
   else
@@ -43,7 +43,9 @@ void setup() {
   // COMMUNICATION /* | GENERAL */ | MSG_TYPES | REMOTE); // set before init()
   // so that you can see startup messages
   mesh.setDebugMsgTypes(
-      COMMUNICATION); // set before init() so that you can see startup messages
+      ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION /* | GENERAL */ |
+      MSG_TYPES |
+      REMOTE); // set before init() so that you can see startup messages
 
   mesh.init(MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT, WIFI_AP_STA,
             6);
