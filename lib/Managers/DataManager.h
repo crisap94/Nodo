@@ -17,10 +17,9 @@ class DataManager {
 public:
   DataManager();
   virtual ~DataManager();
-  String getJSON();
+  String getPayload();
 
 private:
-  void getPayload();
   String json_array;
   void getVariableData();
   long variables[MANAGER_SIZE];
