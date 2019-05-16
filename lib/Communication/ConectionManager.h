@@ -8,17 +8,35 @@
 #if !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)
 #define EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_
 
+#include <ESP8266WiFi.h>
+
+#include "painlessMesh.h"
+
 #include "DataManager.h"
+
+#define MESH_PREFIX "smava"
+#define MESH_PASSWORD "smava1234"
+#define MESH_PORT 5555
+#define MESH_CHANNEL 4
+
 
 class ConectionManager {
 
 public:
+  Scheduler *userScheduler; // to control your personal task
+
   ConectionManager();
   virtual ~ConectionManager();
 
-  char getPayload();
-  bool isConnected();
-  void sendPayload();
-  void sendQueuedData();
+  void loop();
+  void begin();
+
+private:
+  uint32_t gatewayId;
+
+  Task *requestBridgeId;
+  Task *test;
+
+  painlessMesh *mesh;
 };
 #endif // !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)
