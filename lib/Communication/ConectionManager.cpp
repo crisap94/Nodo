@@ -99,9 +99,7 @@ void ConectionManager::begin() {
         }
       });
 
-  
-  mesh->setDebugMsgTypes(ERROR | CONNECTION | MSG_TYPES | REMOTE | DEBUG |
-                         COMMUNICATION | MESH_STATUS | CONNECTION | SYNC);
+  mesh->setDebugMsgTypes(MSG_TYPES | REMOTE | DEBUG | MESH_STATUS | CONNECTION);
 
   mesh->init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
 
