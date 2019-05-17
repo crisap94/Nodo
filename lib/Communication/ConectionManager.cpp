@@ -73,8 +73,9 @@ void ConectionManager::begin() {
     }
   });
 
-  userScheduler->addTask(*requestBridgeId);
-  userScheduler->addTask(*test);
+  userScheduler->addTask(*sendJSON);
+
+  sendJSON->enable();
 }
 
 void ConectionManager::loop() {

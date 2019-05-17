@@ -23,7 +23,7 @@
 class ConectionManager {
 
 public:
-  Scheduler *userScheduler; // to control your personal task
+  Scheduler *userScheduler; 
 
   ConectionManager();
   virtual ~ConectionManager();
@@ -34,7 +34,7 @@ public:
 private:
   uint32_t gatewayId;
 
-  Task *requestBridgeId;
+  Task *sendJSON;
   Task *test;
 
   painlessMesh *mesh;
