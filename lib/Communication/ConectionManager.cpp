@@ -41,7 +41,7 @@ void ConectionManager::begin() {
 
 
   mesh->setDebugMsgTypes(ERROR | MSG_TYPES | REMOTE | DEBUG | MESH_STATUS |
-                         CONNECTION);
+                         CONNECTION | COMMUNICATION);
 
   mesh->init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
 
