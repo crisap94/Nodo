@@ -35,8 +35,9 @@ private:
   uint32_t gatewayId;
 
   Task *sendJSON;
-  Task *test;
 
   painlessMesh *mesh;
+
+  DataManager *m_dataManager;
 };
 #endif // !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)

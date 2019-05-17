@@ -2,40 +2,20 @@
 #include "ConectionManager.h"
 
 
-ConectionManager::ConectionManager() {}
-
-ConectionManager::~ConectionManager() {
-  userScheduler->disableAll();
-  mesh->stop();
-}
-
-void ConectionManager::begin() {
+ConectionManager::ConectionManager() {
 
   mesh = new painlessMesh();
 
   userScheduler = new Scheduler();
 
+  m_dataManager = new DataManager();
+
   gatewayId = 0;
 
-  requestBridgeId = new Task(TASK_SECOND * 5, TASK_FOREVER, [this]() {
-
-    if (gatewayId == 0) { // If we don't know the logServer yet
-      const size_t capacity = JSON_OBJECT_SIZE(2);
-      DynamicJsonDocument doc(capacity);
-
-      doc["nodeId"] = mesh->getNodeId();
-      doc["requestGatewayId"] = true;
-
-      String str;
-      serializeJson(doc, str);
-      mesh->sendBroadcast(str);
-    }
-  });
-
-  test = new Task(TASK_SECOND * 2, TASK_FOREVER, [this]() {
+  sendJSON = new Task(TASK_SECOND * 5, TASK_FOREVER, [this]() {
     Serial.printf("SLAVE -> Executing Test Task Gateway ID: %u",
-                  this->gatewayId);
-    if (this->gatewayId != 0) {
+                  gatewayId);
+    if (gatewayId != 0) {
       const size_t capacity = JSON_OBJECT_SIZE(2);
       DynamicJsonDocument doc(capacity);
 
@@ -44,10 +24,21 @@ void ConectionManager::begin() {
       String str;
       serializeJson(doc, str);
       Serial.println("SLAVE -> Sending test Packet");
+      str = this->m_dataManager->getPayload();
       mesh->sendSingle(gatewayId, str);
     }
 
   });
+
+}
+
+ConectionManager::~ConectionManager() {
+  userScheduler->disableAll();
+  mesh->stop();
+}
+
+void ConectionManager::begin() {
+
 
   mesh->setDebugMsgTypes(ERROR | MSG_TYPES | REMOTE | DEBUG | MESH_STATUS |
                          CONNECTION);
