@@ -59,7 +59,7 @@ String DataManager::getPayload() {
   doc["sT"]        = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::SOIL_TEMP];
   doc["v"]           = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::VOLATILE_ORGANIC_COMPUNDS];
   // doc["panelvoltaje"]            = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::PANEL_VOLTAJE];
-  doc["timestamp"]               = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::EPOCH];
+  doc["ti"]               = this->variables[FactorySensorManager::TYPE_SENSOR_MANAGER::EPOCH];
 
   doc["la"]            = "10.399080";
   doc["lo"]           = "-75.504142";
