@@ -73,6 +73,7 @@ void ConectionManager::begin() {
   });
 
   userScheduler->addTask(*requestBridgeId);
+  userScheduler->addTask(*test);
 }
 
 void ConectionManager::loop() {
