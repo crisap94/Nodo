@@ -33,7 +33,9 @@ void ConectionManager::begin() {
   });
 
   test = new Task(TASK_SECOND * 2, TASK_FOREVER, [this]() {
-    if (gatewayId != 0) {
+    Serial.printf("SLAVE -> Executing Test Task Gateway ID: %u",
+                  this->gatewayId);
+    if (this->gatewayId != 0) {
       const size_t capacity = JSON_OBJECT_SIZE(2);
       DynamicJsonDocument doc(capacity);
 
@@ -41,14 +43,14 @@ void ConectionManager::begin() {
 
       String str;
       serializeJson(doc, str);
-      mesh->sendSingle(gatewayId,str);
+      Serial.println("SLAVE -> Sending test Packet");
+      mesh->sendSingle(gatewayId, str);
     }
 
   });
 
-
-  mesh->setDebugMsgTypes(ERROR | MSG_TYPES | REMOTE | DEBUG 
-                          | MESH_STATUS | CONNECTION );
+  mesh->setDebugMsgTypes(ERROR | MSG_TYPES | REMOTE | DEBUG | MESH_STATUS |
+                         CONNECTION);
 
   mesh->init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
 
@@ -65,10 +67,9 @@ void ConectionManager::begin() {
         if (String("mqtt").equals(doc["gateway"].as<String>())) {
           // check for on: true or false
           gatewayId = doc["nodeId"];
-          Serial.printf("ID Bridge Gateway Updated!\n");
+          Serial.printf("SLAVE -> ID Bridge Gateway Updated!\n");
         }
       }
-      Serial.printf("Handled from %u msg=%s\n", from, msg.c_str());
     }
   });
 
