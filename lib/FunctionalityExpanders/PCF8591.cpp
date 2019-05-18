@@ -175,21 +175,4 @@ long PCF8591::readVcc(void) {
 
 PCF8591::~PCF8591() {}
 
-float PCF8591::getValue(PCF8591::PIN _pin) {
-  float value = -1;
-  switch (_pin) {
-  case PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE:
-    value = analogRead(AIN0);
-    break;
-  case PCF8591::PIN::BATT_VOLTAJE:
-    value = analogRead(AIN1);
-    break;
-  case PCF8591::PIN::PANEL_VOLTAJE:
-    value = analogRead(AIN2);
-    break;
-  case PCF8591::PIN::SOIL_HUMIDITY_VOLTAJE:
-    value = analogRead(AIN3);
-    break;
-  }
-  return value;
-}
+float PCF8591::getValue(PCF8591::PIN _pin) { return voltageRead(_pin); }
