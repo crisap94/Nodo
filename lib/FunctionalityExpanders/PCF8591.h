@@ -82,14 +82,14 @@ public:
      * * Pins from PCF8591
      *
      */
-    BATT_TEMPERATURE_VOLTAJE = 0,
-    BATT_VOLTAJE = 1,
-    SOIL_HUMIDITY_VOLTAJE = 2,
-    PANEL_VOLTAJE = 3,
+    BATT_TEMPERATURE_VOLTAJE = 2 ,
+    BATT_VOLTAJE = 0,
+    SOIL_HUMIDITY_VOLTAJE = 3,
+    PANEL_VOLTAJE = 1,
   };
   static PCF8591 *getInstance() {
-    if (m_pcf8591) {
-      m_pcf8591 = new PCF8591();
+    if (m_pcf8591 == NULL) {
+      m_pcf8591 = new PCF8591(0x48);
     }
 
     return m_pcf8591;
