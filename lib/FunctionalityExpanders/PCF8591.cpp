@@ -19,7 +19,7 @@ PCF8591::PCF8591(uint8_t address) {
 
 void PCF8591::begin() {
 #ifndef __AVR
-  Wire.begin(_sda, _scl);
+// Wire.begin(_sda, _scl);
 #else
   //			Default pin for AVR some problem on software emulation
   //			#define SCL_PIN _scl
