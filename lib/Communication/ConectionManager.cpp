@@ -13,16 +13,16 @@ ConectionManager::ConectionManager() {
   gatewayId = 0;
 
   sendJSON = new Task(TASK_SECOND * 5, TASK_FOREVER, [this]() {
-    Serial.printf("SLAVE -> Executing Test Task Gateway ID: %u",
+    Serial.printf("SLAVE -> Executing Test Task Gateway ID: %u\n",
                   gatewayId);
     if (gatewayId != 0) {
-      const size_t capacity = JSON_OBJECT_SIZE(2);
-      DynamicJsonDocument doc(capacity);
+      //const size_t capacity = JSON_OBJECT_SIZE(2);
+      //DynamicJsonDocument doc(capacity);
 
-      doc["test"] = true;
+      //doc["test"] = true;
 
       String str;
-      serializeJson(doc, str);
+      //serializeJson(doc, str);
       Serial.println("SLAVE -> Sending test Packet");
       str = this->m_dataManager->getPayload();
       mesh->sendSingle(gatewayId, str);
