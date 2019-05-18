@@ -8,7 +8,7 @@
 #if !defined(EA_93B99A19_88B0_4301_B371_8E3190620A74__INCLUDED_)
 #define EA_93B99A19_88B0_4301_B371_8E3190620A74__INCLUDED_
 
-#include "Arduino.h"
+
 #include "Wire.h"
 
 #include "I2C.h"
