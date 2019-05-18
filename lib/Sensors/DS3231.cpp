@@ -16,7 +16,7 @@ DS3231::DS3231() {
   this->ds3231 = new RtcDS3231<TwoWire>(Wire);
   this->ds3231->Begin();
   RtcDateTime *compiled = new RtcDateTime(__DATE__, __TIME__);
-  this->time = new RtcDateTime(this->ds3231->GetDateTime());
+  this->m_time = new RtcDateTime(this->ds3231->GetDateTime());
   if (!this->ds3231->IsDateTimeValid()) {
 
     // DEBUG("RTC lost confidence in the DateTime!");
@@ -28,13 +28,13 @@ DS3231::DS3231() {
     this->ds3231->SetIsRunning(true);
   }
 
-  if (*this->time < *compiled) {
-    //  DEBUG("RTC is older than compile time!  (Updating DateTime)");
+  if (*this->m_time < *compiled) {
+    //  DEBUG("RTC is older than compile m_time!  (Updating DateTime)");
     this->ds3231->SetDateTime(*compiled);
-  } else if (*this->time > *compiled) {
-    //  DEBUG("RTC is newer than compile time. (this is expected)");
-  } else if (*this->time == *compiled) {
-    //  DEBUG("RTC is the same as compile time! (not expected but all is
+  } else if (*this->m_time > *compiled) {
+    //  DEBUG("RTC is newer than compile m_time. (this is expected)");
+  } else if (*this->m_time == *compiled) {
+    //  DEBUG("RTC is the same as compile m_time! (not expected but all is
     //  fine)");
   }
 
@@ -45,28 +45,19 @@ DS3231::DS3231() {
 
 DS3231::~DS3231() {}
 
-RtcDateTime *DS3231::getTime() {
 
+uint64_t DS3231::getValue() {
+  uint64_t epoch = 0;
   if (!this->ds3231->IsDateTimeValid()) {
     // Common Cuases:
     //    1) the battery on the device is low or even missing and the power line
     //    was disconnected
     //  DEBUG("RTC lost confidence in the DateTime!");
+    return epoch;
   }
+  delete m_time;
+  m_time = new RtcDateTime(ds3231->GetDateTime());
+  epoch = m_time->Epoch64Time();
 
-  return this->time;
-}
-
-void DS3231::update() {
-    delete this->time;
-    this->time = new RtcDateTime(this->ds3231->GetDateTime());
-    
-    //  DEBUG("%02u/%02u/%04u %02u:%02u:%02u", this->time->Month(),
-    //        this->time->Day(), this->time->Year(), this->time->Hour(),
-    //        this->time->Minute(), this->time->Second());
-}
-
-long DS3231::getValue() {
-  long epoch = 123123122;
   return epoch;
 }

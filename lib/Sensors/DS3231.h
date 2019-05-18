@@ -16,7 +16,7 @@
 class DS3231 : public Sensor {
 private:
   static DS3231 *m_ds3231;
-  RtcDateTime *time;
+  RtcDateTime *m_time;
   RtcDS3231<TwoWire> *ds3231;
 
   DS3231();
@@ -31,7 +31,7 @@ public:
   }
 
   void begin();
-  long getValue();
+  uint64_t getValue();
 
   /**
     *@brief Get the Time from the DS1307
@@ -39,19 +39,6 @@ public:
     *@return RtcDateTime
     */
   RtcDateTime *getTime();
-
-  /**
-   * @brief Set the Invalid Time Function
-   *
-   * @param _callbackfunction
-   */
-  void setInvalidTimeFunction(void (*_callbackfunction)(void));
-
-  /**
-   * @brief
-   *
-   */
-  void update();
 
 };
 #endif // !defined(EA_13654DAA_29C3_4fb2_A884_C58B464B277D__INCLUDED_)
