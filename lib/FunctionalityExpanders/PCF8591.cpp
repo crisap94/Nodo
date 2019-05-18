@@ -37,7 +37,7 @@ void PCF8591::begin() {
  * 	TWO_DIFFERENTIAL_INPUT
  * @return
  */
-struct PCF8591::AnalogInput PCF8591::analogReadAll(byte readType) {
+PCF8591::AnalogInput PCF8591::analogReadAll(byte readType) {
   DEBUG_PRINTLN("Begin trasmission");
   Wire.beginTransmission(_address); // wake up PCF8591
 
