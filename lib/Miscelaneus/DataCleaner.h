@@ -5,7 +5,8 @@
  *  Licensed under LGPL (free to modify and use as you wish)
  */
 
-#pragma once
+#if !defined(_DATACLEANER__INCLUDED_)
+#define _DATACLEANER__INCLUDED_
 
 #define SMOOTHED_AVERAGE 1
 #define SMOOTHED_EXPONENTIAL 2
@@ -188,3 +189,5 @@ bool DataCleaner<T>::clear () {
       break;
   }         
 }
+
+#endif // !defined(_DATACLEANER__INCLUDED_)
