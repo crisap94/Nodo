@@ -97,18 +97,18 @@ public:
 
   void begin(void);
 
-  struct AnalogInput analogReadAll(byte readType = SINGLE_ENDED_INPUT);
+  AnalogInput analogReadAll(byte readType = SINGLE_ENDED_INPUT);
 
   uint8_t analogRead(uint8_t channel, byte readType = SINGLE_ENDED_INPUT);
 
   void analogWrite(uint8_t value);
 
   void voltageWrite(float value, bool microcontrollerReferenceVoltage = true,
-                    float referenceVoltage = 5.0);
+                    float referenceVoltage = 3.3);
 
   float voltageRead(uint8_t analogPin,
                     bool microcontrollerReferenceVoltage = true,
-                    float referenceVoltage = 5.0);
+                    float referenceVoltage = 3.3);
 
   float getValue(PCF8591::PIN _pin);
 };
