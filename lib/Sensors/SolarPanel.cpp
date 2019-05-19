@@ -19,6 +19,8 @@ SolarPanel::SolarPanel() {
 SolarPanel::~SolarPanel() {}
 
 float SolarPanel::getVoltaje() {
-  float panelVoltaje = (m_pcf8591->analogRead((PCF8591::PIN)pinConnection) * 6.0)/ADC_RESOLUTION;
+  // Simulating the LDR as a Solar Panel
+  float analogValue = ADC_RESOLUTION - m_pcf8591->analogRead((PCF8591::PIN)pinConnection);
+  float panelVoltaje = ( analogValue * 6.0)/ADC_RESOLUTION;
   return panelVoltaje;
 }
