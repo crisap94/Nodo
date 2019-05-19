@@ -11,10 +11,10 @@
 Battery *Battery::m_battery = NULL;
 
 Battery::Battery(){
-	this->pinConnection = PCF8591::PIN::BATT_VOLTAJE;
-	this->m_pcf8591 = PCF8591::getInstance();
-	this->m_tp4056 = TP4056::getInstance();
-	this->m_ntc = NTC::getInstance();
+	pinConnection = PCF8591::PIN::BATT_VOLTAJE;
+	m_pcf8591 = PCF8591::getInstance();
+	m_tp4056 = TP4056::getInstance();
+	m_ntc = NTC::getInstance();
 }
 
 Battery::~Battery(){
@@ -22,12 +22,13 @@ Battery::~Battery(){
 }
 
 float Battery::getTemp(){
-	return this->m_ntc->getValue();
+	return m_ntc->getValue();
 }
 
 
 float Battery::getVoltaje(){
-  return this->m_pcf8591->getValue((PCF8591::PIN)pinConnection);
+  float BattVoltaje = (m_pcf8591->getValue((PCF8591::PIN)pinConnection) * 3.3)/ADC_RESOLUTION;
+  return BattVoltaje;
 }
 
 boolean Battery::getStatus(){
