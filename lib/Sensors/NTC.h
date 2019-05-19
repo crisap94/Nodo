@@ -18,8 +18,6 @@
 #define KELVIN_AT_25 298.15
 #define Vin 3.3
 
-#define ADC_RESOLUTION 255
-
 class NTC : public Sensor {
 private:
   static NTC *m_ntc;

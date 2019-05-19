@@ -5,17 +5,6 @@
 //  Original author: Cristian Arrieta P
 ///////////////////////////////////////////////////////////
 
-/**
-        The class implements a set of methods of the NTC_Thermistor.h
-        interface for working with a NTC thermistor and reading
-        a temperature in Celsius, Fahrenheit and Kelvin.
-
-        https://github.com/YuriiSalimov/NTC_Thermistor
-
-        Created by Yurii Salimov, February, 2018.
-        Released into the public domain.
-*/
-
 #include "NTC.h"
 #include "ESP8266WiFi.h"
 
