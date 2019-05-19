@@ -111,7 +111,5 @@ public:
   float voltageRead(uint8_t analogPin,
                     bool microcontrollerReferenceVoltage = true,
                     float referenceVoltage = 3.3);
-
-  float getValue(PCF8591::PIN _pin);
 };
 #endif // !defined(EA_93B99A19_88B0_4301_B371_8E3190620A74__INCLUDED_)
