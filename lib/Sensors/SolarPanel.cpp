@@ -11,13 +11,14 @@
 SolarPanel *SolarPanel::m_solarPanel = NULL;
 
 SolarPanel::SolarPanel() {
-  this->m_pcf8591 = PCF8591::getInstance();
-  this->pinConnection = PCF8591::PIN::PANEL_VOLTAJE;
-  this->samplingInterval = 5;
+  m_pcf8591 = PCF8591::getInstance();
+  pinConnection = PCF8591::PIN::PANEL_VOLTAJE;
+  samplingInterval = 5;
 }
 
 SolarPanel::~SolarPanel() {}
 
 float SolarPanel::getVoltaje() {
-  return this->m_pcf8591->getValue((PCF8591::PIN)this->pinConnection);
+  float panelVoltaje = (m_pcf8591->analogRead((PCF8591::PIN)pinConnection) * 3.3)/ADC_RESOLUTION;
+  return panelVoltaje;
 }
