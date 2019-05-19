@@ -6,18 +6,18 @@
 ///////////////////////////////////////////////////////////
 
 #include "CapacitiveSoilMoisture.h"
-#include "ESP8266WiFi.h"
 
 CapacitiveSoilMoisture *CapacitiveSoilMoisture::m_CapacitiveSoilMoisture = NULL;
 
 CapacitiveSoilMoisture::CapacitiveSoilMoisture() {
-  this->m_pcf8591 = PCF8591::getInstance();
-  this->pinConnection = PCF8591::PIN::SOIL_HUMIDITY_VOLTAJE;
-  this->samplingInterval = 5;
+  m_pcf8591 = PCF8591::getInstance();
+  pinConnection = PCF8591::PIN::SOIL_HUMIDITY_VOLTAJE;
 }
 
 CapacitiveSoilMoisture::~CapacitiveSoilMoisture() {}
 
 float CapacitiveSoilMoisture::getValue() {
-  return this->m_pcf8591->getValue((PCF8591::PIN)this->pinConnection);
+  float analogValue = m_pcf8591->analogRead((PCF8591::PIN)pinConnection);
+
+  return (analogValue*100)/ADC_RESOLUTION;
 }

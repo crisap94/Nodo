@@ -21,7 +21,6 @@ private:
   PCF8591 *m_pcf8591;
 
   int pinConnection;
-  int samplingInterval;
   
   CapacitiveSoilMoisture();
   virtual ~CapacitiveSoilMoisture();
