@@ -22,51 +22,25 @@
 NTC *NTC::m_ntc = NULL;
 
 NTC::NTC() {
-  pin = PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE;
-  referenceResistance = 8000;
-  nominalResistance = 100000;
-  nominalTemperature = 25;
-  bValue = 3950;
+  analogPin = PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE;
+
   m_pcf8591 = PCF8591::getInstance();
-
 }
 
-double NTC::readCelsius() { return kelvinsToCelsius(readKelvin()); }
+double NTC::getValue() {
 
-double NTC::readFahrenheit() { return kelvinsToFahrenheit(readKelvin()); }
+  int analogValue = m_pcf8591->analogRead(analogPin);
+  
+  double Vout = (analogValue * Vin) / ADC_RESOLUTION;
 
-double NTC::readFarenheit() { return readFahrenheit(); }
+  // R2 NTC Resistance
+  double R2 = (Vout * R1) / (Vin - Vout);
 
-double NTC::readKelvin() { return resistanceToKelvins(readResistance()); }
+  double Tk = 1 / (((log(R2 / R_AT_25)) / (BCOEF)) + (1 / KELVIN_AT_25));
 
-inline double NTC::resistanceToKelvins(const double resistance) {
-  const double inverseKelvin =
-      1.0 / nominalTemperature +
-      1.0 / bValue * log(resistance / nominalResistance);
-  return (1.0 / (inverseKelvin));
-}
+  double C = Tk - 273.15;
 
-inline double NTC::readResistance() {
-  return referenceResistance / (NTC_ADC / readVoltage());
-}
-
-inline double NTC::readVoltage() {
-  //Serial.println(m_pcf8591->getValue((PCF8591::PIN)pin));
-  return m_pcf8591->voltageRead((PCF8591::PIN)pin);
-}
-
-inline double NTC::celsiusToKelvins(const double celsius) {
-  return (celsius + 273.15);
-}
-
-inline double NTC::kelvinsToCelsius(const double kelvins) {
-  return (kelvins - 273.15);
-}
-
-inline double NTC::celsiusToFahrenheit(const double celsius) {
-  return (celsius * 1.8 + 32);
+  return C;
 }
 
 NTC::~NTC() {}
-
-float NTC::getValue() { return m_ntc->readCelsius(); }
