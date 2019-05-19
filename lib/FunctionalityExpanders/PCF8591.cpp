@@ -174,5 +174,3 @@ long PCF8591::readVcc(void) {
 }
 
 PCF8591::~PCF8591() {}
-
-float PCF8591::getValue(PCF8591::PIN _pin) { return voltageRead(_pin); }
