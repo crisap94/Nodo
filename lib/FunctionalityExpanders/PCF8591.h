@@ -52,6 +52,8 @@
 
 #define OUTPUT_MASK B01000000
 
+#define ADC_RESOLUTION 255
+
 class PCF8591 : public I2C {
 private:
   static PCF8591 *m_pcf8591;
