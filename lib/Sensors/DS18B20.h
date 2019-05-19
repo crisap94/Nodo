@@ -27,7 +27,7 @@ private:
   // Maxim/Dallas temperature ICs)
   OneWire *oneWire;
 
-  DeviceAddress *tempDeviceAddress;
+  DeviceAddress tempDeviceAddress;
 
   // Pass our oneWire reference to Dallas Temperature.
   DallasTemperature *ds18b20;
