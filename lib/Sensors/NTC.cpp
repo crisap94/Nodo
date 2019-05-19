@@ -22,13 +22,13 @@
 NTC *NTC::m_ntc = NULL;
 
 NTC::NTC() {
-  this->pin = PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE;
-  this->referenceResistance = 8000;
-  this->nominalResistance = 100000;
-  this->nominalTemperature = 25;
-  this->bValue = 3950;
-  this->m_pcf8591 = PCF8591::getInstance();
-  this->readingsNumber = 10;
+  pin = PCF8591::PIN::BATT_TEMPERATURE_VOLTAJE;
+  referenceResistance = 8000;
+  nominalResistance = 100000;
+  nominalTemperature = 25;
+  bValue = 3950;
+  m_pcf8591 = PCF8591::getInstance();
+
 }
 
 double NTC::readCelsius() { return kelvinsToCelsius(readKelvin()); }
@@ -41,27 +41,18 @@ double NTC::readKelvin() { return resistanceToKelvins(readResistance()); }
 
 inline double NTC::resistanceToKelvins(const double resistance) {
   const double inverseKelvin =
-      1.0 / this->nominalTemperature +
-      1.0 / this->bValue * log(resistance / this->nominalResistance);
+      1.0 / nominalTemperature +
+      1.0 / bValue * log(resistance / nominalResistance);
   return (1.0 / (inverseKelvin));
 }
 
 inline double NTC::readResistance() {
-  return this->referenceResistance / (NTC_ADC / readVoltage() - 1);
+  return referenceResistance / (NTC_ADC / readVoltage());
 }
 
 inline double NTC::readVoltage() {
-  return this->m_pcf8591->getValue((PCF8591::PIN )this->pin);
-}
-
-void NTC::setReadingsNumber(const int newReadingsNumber) {
-  this->readingsNumber =
-      validate(newReadingsNumber, NTC_DEFAULT_READINGS_NUMBER);
-}
-
-template <typename A, typename B>
-A NTC::validate(const A data, const B alternative) {
-  return (data > 0) ? data : alternative;
+  //Serial.println(m_pcf8591->getValue((PCF8591::PIN)pin));
+  return m_pcf8591->voltageRead((PCF8591::PIN)pin);
 }
 
 inline double NTC::celsiusToKelvins(const double celsius) {
@@ -78,6 +69,4 @@ inline double NTC::celsiusToFahrenheit(const double celsius) {
 
 NTC::~NTC() {}
 
-float NTC::getValue() {
-  return this->m_ntc->readCelsius();
-}
+float NTC::getValue() { return m_ntc->readCelsius(); }

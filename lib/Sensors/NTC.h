@@ -30,7 +30,7 @@
 /**
         Max value of Arduino ADC.
 */
-#define NTC_ADC_MAX 1023
+#define NTC_ADC_MAX 255
 
 /**
         Values diapason of Arduino ADC
@@ -48,7 +48,7 @@ private:
 
   int pin; // an analog port.
   double referenceResistance;
-  double nominalResistance;
+  double nominalResistance; 
   double nominalTemperature; // in Celsius.
   double bValue;
   int readingsNumber;
@@ -71,7 +71,6 @@ private:
 
   inline double kelvinsToFahrenheit(double kelvins);
 
-  template <typename A, typename B> A validate(A data, B alternative);
 
 public:
   static NTC *getInstance() {
@@ -90,8 +89,6 @@ public:
   double readFahrenheit();
 
   double readFarenheit();
-
-  void setReadingsNumber(int newReadingsNumber);
 
 };
 #endif // !defined(EA_CE9233F3_0BB0_419e_A745_11B236F4F9B4__INCLUDED_)
