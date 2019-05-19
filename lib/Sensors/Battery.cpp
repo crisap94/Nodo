@@ -27,7 +27,7 @@ float Battery::getTemp(){
 
 
 float Battery::getVoltaje(){
-  float BattVoltaje = (m_pcf8591->analogRead((PCF8591::PIN)pinConnection) * 3.3)/ADC_RESOLUTION;
+  float BattVoltaje = (m_pcf8591->analogRead((PCF8591::PIN)pinConnection) * 4.2)/ADC_RESOLUTION;
   return BattVoltaje;
 }
 
