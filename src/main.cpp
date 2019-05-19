@@ -2,9 +2,23 @@
 
 #include <Wire.h>
 
-#include "DataManager.h"
+//#include "DataManager.h"
 
-DataManager *m_dataManager;
+#include <BME680.h>
+#include <Battery.h>
+#include <CapacitiveSoilMoisture.h>
+#include <DS3231.h>
+#include <SolarPanel.h>
+#include <VEML6075.h>
+
+// DataManager *m_dataManager;
+
+Battery *m_batt;
+BME680 *m_bme;
+VEML6075 *m_veml;
+DS3231 *m_ds32;
+SolarPanel *m_sol;
+CapacitiveSoilMoisture *m_soil;
 
 #define SCL 2
 #define SDA 0
@@ -15,16 +29,30 @@ void setup() {
 
   delay(2000);
 
-  m_dataManager = new DataManager();
+  m_batt = Battery::getInstance();
+  m_bme = BME680::getInstance();
+  m_ds32 = DS3231::getInstance();
+  m_veml = VEML6075::getInstance();
+  m_sol = SolarPanel::getInstance();
+
+  // m_dataManager = new DataManager();
 }
 
 void loop() {
-  m_dataManager->loop();
 
-  if (m_dataManager->isReady()) {
-    Serial.println(m_dataManager->getPayload());
-  }
+  Serial.printf("BattTemp: %f BattVolt: %f PanelVolt: %f Humidity: %f "
+                "Temperature: %f Pressure: %f VOC: %f EPOCH: %llx UV: %f \n",
+                m_batt->getTemp(), m_batt->getVoltaje(), m_sol->getVoltaje(),
+                m_bme->getHumidity(), m_bme->getTemperature(),
+                m_bme->getPressure(), m_bme->getVOC(), m_ds32->getValue(),
+                m_veml->getValue());
+
+  delay(20);
+
+  // m_dataManager->loop();
+  // if (m_dataManager->isReady()) {
+  //   Serial.println(m_dataManager->getPayload());
+  // }
 
   // Serial.println(m_dataManager->getJSON());
-  
 }
