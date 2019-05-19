@@ -40,14 +40,12 @@ void setup() {
 
 void loop() {
 
-  Serial.printf("BattTemp: %f BattVolt: %f PanelVolt: %f Humidity: %f "
-                "Temperature: %f Pressure: %f VOC: %f EPOCH: %llx UV: %f \n",
+  Serial.printf("BattTemp: %2.1f BattVolt: %1.1f PanelVolt: %1.1f Humidity: %2.1f "
+                "Temperature: %2.1f Pressure: %4.1f VOC: %3.1f EPOCH: %lld UV: %1.1f \n",
                 m_batt->getTemp(), m_batt->getVoltaje(), m_sol->getVoltaje(),
                 m_bme->getHumidity(), m_bme->getTemperature(),
                 m_bme->getPressure(), m_bme->getVOC(), m_ds32->getValue(),
                 m_veml->getValue());
-
-  delay(20);
 
   // m_dataManager->loop();
   // if (m_dataManager->isReady()) {
