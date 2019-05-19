@@ -16,16 +16,24 @@
 DS18B20 *DS18B20::m_ds18b20 = NULL;
 
 DS18B20::DS18B20() {
+  pinMode(ONE_WIRE_BUS, FUNCTION_3);
+
   this->oneWire = new OneWire(ONE_WIRE_BUS);
   this->ds18b20 = new DallasTemperature(this->oneWire);
 
-  this->ds18b20->begin();
+  ds18b20->begin();
+  ds18b20->getAddress(*tempDeviceAddress, 0);
+  ds18b20->setResolution(*tempDeviceAddress, RESOLUTION);
+
+  ds18b20->setWaitForConversion(false);
+  ds18b20->requestTemperatures();
+
 }
 
 DS18B20::~DS18B20() {}
 
 float DS18B20::getValue() {
-  this->ds18b20->requestTemperatures();
   float temp = this->ds18b20->getTempCByIndex(0);
+  this->ds18b20->requestTemperatures();
   return temp;
 }

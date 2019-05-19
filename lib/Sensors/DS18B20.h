@@ -14,9 +14,8 @@
 
 #include <DallasTemperature.h>
 
-
-// Data wire is plugged into port 2 on the Arduino
-#define ONE_WIRE_BUS 2
+#define ONE_WIRE_BUS 3
+#define RESOLUTION 9
 
 
 
@@ -27,6 +26,8 @@ private:
   // Setup a oneWire instance to communicate with any OneWire devices (not just
   // Maxim/Dallas temperature ICs)
   OneWire *oneWire;
+
+  DeviceAddress *tempDeviceAddress;
 
   // Pass our oneWire reference to Dallas Temperature.
   DallasTemperature *ds18b20;
