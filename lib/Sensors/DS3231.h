@@ -8,12 +8,16 @@
 #if !defined(EA_13654DAA_29C3_4fb2_A884_C58B464B277D__INCLUDED_)
 #define EA_13654DAA_29C3_4fb2_A884_C58B464B277D__INCLUDED_
 
-#include "I2C.h"
+#include "Wire.h"
+
+#include "RtcDS3231.h"
 #include "Sensor.h"
 
-class DS3231 : public Sensor, public I2C {
+class DS3231 : public Sensor {
 private:
   static DS3231 *m_ds3231;
+  RtcDateTime *m_time;
+  RtcDS3231<TwoWire> *ds3231;
 
   DS3231();
   virtual ~DS3231();
@@ -27,6 +31,14 @@ public:
   }
 
   void begin();
-  long getValue();
+  uint64_t getValue();
+
+  /**
+    *@brief Get the Time from the DS1307
+    *
+    *@return RtcDateTime
+    */
+  RtcDateTime *getTime();
+
 };
 #endif // !defined(EA_13654DAA_29C3_4fb2_A884_C58B464B277D__INCLUDED_)
