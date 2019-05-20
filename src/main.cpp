@@ -11,7 +11,7 @@ DataManager *m_dataManager;
 
 void setup() {
   Wire.begin(SDA, SCL);
-  Wire.setClock(3400000);
+  Wire.setClock(400000);
   Serial.begin(115200);
   taskScheduller = new Scheduler();
   delay(2000);

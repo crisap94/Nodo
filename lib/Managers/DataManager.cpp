@@ -74,7 +74,8 @@ DataManager::DataManager(Scheduler *m_scheduller)
   m_dataScheduler = m_scheduller;
 
   for (size_t task = 0; task < MANAGER_SIZE; task++) {
-    Serial.printf("DEBUG -> Creating Task (%s)\n", MANAGER_TYPE(task).c_str());
+    Serial.printf("DEBUG -> Creating Task (%s)\n",
+                  MANAGER_TYPE(managers[task]).c_str());
     m_tasks[task] =
         new Task(TASK_MILLISECOND * intervals[task], TASK_FOREVER,
                  [this, task]() {
@@ -95,13 +96,14 @@ DataManager::DataManager(Scheduler *m_scheduller)
                         *
                         */
 
-                       ManagerType type = (ManagerType)task;
+                       ManagerType type = (ManagerType)managers[task];
+
                        SensorManager *manager;
                        manager = m_factoryManager->createManager(type);
                        this->rawValues[dataset][sample] = manager->getData();
 
                        Serial.printf("Gettin Value from (%s) -> \t\t\t(%.1f)\n",
-                                     MANAGER_TYPE(task).c_str(),
+                                     MANAGER_TYPE(managers[task]).c_str(),
                                      this->rawValues[dataset][sample]);
 
                        delete manager;
@@ -111,7 +113,7 @@ DataManager::DataManager(Scheduler *m_scheduller)
                      } else if (sample == (SAMPLES - 1)) {
 
                        Serial.printf("\n\nDisabling task (%s)\n\n",
-                                     MANAGER_TYPE(task).c_str());
+                                     MANAGER_TYPE(managers[task]).c_str());
                        /**
                         * @brief if all the data are already gathered then
                         * the task is disabled
@@ -123,14 +125,16 @@ DataManager::DataManager(Scheduler *m_scheduller)
                         * @brief After
                         *
                         */
-                       Serial.printf("Updating average value for (%s)\n\n",
-                                     MANAGER_TYPE(task).c_str());
                        m_cleaner = new DataCleaner<long>;
                        m_cleaner->begin(algorithm[task], SAMPLES);
                        for (size_t sample = 0; sample < SAMPLES; sample++) {
                          m_cleaner->add(rawValues[task][sample]);
                        }
                        variables[task] = m_cleaner->get();
+                       Serial.printf(
+                           "Updating average value for (%s)(%.1f)\n\n",
+                           MANAGER_TYPE(managers[task]).c_str(),
+                           variables[task]);
                        delete m_cleaner;
                      }
                    }
@@ -140,23 +144,15 @@ DataManager::DataManager(Scheduler *m_scheduller)
 
   for (size_t task = 0; task < MANAGER_SIZE; task++) {
     // Enable all the Tasks previusly added to thescheduller
-    m_tasks[task]->enable();
+    if (managers[task] == ManagerType::VOLATILE_ORGANIC_COMPUNDS) {
+      this->m_tasks[task]->enableDelayed(5000);
+    } else {
+      m_tasks[task]->enable();
+    }
   }
 }
 
 DataManager::~DataManager() {}
-
-bool DataManager::dataAvailable() {
-  for (size_t dataset = 0; dataset < MANAGER_SIZE; dataset++) {
-    for (size_t sample = 0; sample < SAMPLES; sample++) {
-      if (rawValues[dataset][sample] == NOT_SET) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
 
 bool DataManager::isReady() {
   for (size_t variable = 0; variable < MANAGER_SIZE; variable++) {
@@ -171,7 +167,8 @@ String DataManager::getPayload() {
 
   if (isReady()) {
     SensorManager *m_rtc = m_factoryManager->createManager(ManagerType::EPOCH);
-    SensorManager *m_bStatus = m_factoryManager->createManager(ManagerType::BATT_STATUS);
+    SensorManager *m_bStatus =
+        m_factoryManager->createManager(ManagerType::BATT_STATUS);
 
     uint64_t EPOCH = m_rtc->getData();
     bool battStatus = m_bStatus->getData();
@@ -182,20 +179,20 @@ String DataManager::getPayload() {
     const size_t capacity = JSON_OBJECT_SIZE(15);
     DynamicJsonDocument doc(capacity);
 
-    doc["t"] = variables[ManagerType::AMBIENT_TEMPERATURE];
-    doc["h"] = variables[ManagerType::AMBIENT_HUMIDITY];
-    doc["sH"] = variables[ManagerType::SOIL_HUMIDITY];
-    doc["p"] = variables[ManagerType::AMBIENT_PRESSURE];
-    doc["u"] = variables[ManagerType::ULTRAVIOLE_INDEX];
-    doc["b"] = variables[ManagerType::BRIGHTNESS];
-    doc["sT"] = variables[ManagerType::SOIL_TEMP];
-    doc["v"] = variables[ManagerType::VOLATILE_ORGANIC_COMPUNDS];
-    doc["pV"] = variables[ManagerType::PANEL_VOLTAJE];
+    doc["t"] = variables[VARIABLES::VAR_AMBIENT_TEMPERATURE];
+    doc["h"] = variables[VARIABLES::VAR_AMBIENT_HUMIDITY];
+    doc["sH"] = variables[VARIABLES::VAR_SOIL_HUMIDITY];
+    doc["p"] = variables[VARIABLES::VAR_AMBIENT_PRESSURE];
+    doc["u"] = variables[VARIABLES::VAR_ULTRAVIOLE_INDEX];
+    doc["b"] = variables[VARIABLES::VAR_BRIGHTNESS];
+    doc["sT"] = variables[VARIABLES::VAR_SOIL_TEMP];
+    doc["v"] = variables[VARIABLES::VAR_VOLATILE_ORGANIC_COMPUNDS];
+    doc["pV"] = variables[VARIABLES::VAR_PANEL_VOLTAJE];
     doc["ti"] = EPOCH;
     doc["la"] = "10.399080";
     doc["lo"] = "-75.504142";
-    doc["bV"] = variables[ManagerType::BATT_VOLTAJE];
-    doc["bT"] = variables[ManagerType::BATT_TEMPERATURE];
+    doc["bV"] = variables[VARIABLES::VAR_BATT_VOLTAJE];
+    doc["bT"] = variables[VARIABLES::VAR_BATT_TEMPERATURE];
     doc["bS"] = battStatus;
 
     serializeJsonPretty(doc, json_array);
