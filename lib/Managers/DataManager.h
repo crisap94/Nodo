@@ -54,7 +54,7 @@ public:
     ALGORITHM_AMBIENT_HUMIDITY            = SMOOTHED_AVERAGE,
     ALGORITHM_AMBIENT_TEMPERATURE         = SMOOTHED_AVERAGE,
     ALGORITHM_AMBIENT_PRESSURE            = SMOOTHED_AVERAGE,
-    ALGORITHM_SOIL_TEMP                   = SMOOTHED_AVERAGE,
+    ALGORITHM_SOIL_TEMP                   = SMOOTHED_EXPONENTIAL,
     ALGORITHM_SOIL_HUMIDITY               = SMOOTHED_EXPONENTIAL,
     ALGORITHM_BATT_VOLTAJE                = SMOOTHED_EXPONENTIAL,
     ALGORITHM_BATT_TEMPERATURE            = SMOOTHED_EXPONENTIAL,
@@ -62,8 +62,24 @@ public:
     ALGORITHM_PANEL_VOLTAJE               = SMOOTHED_AVERAGE,
     ALGORITHM_ULTRAVIOLE_INDEX            = SMOOTHED_AVERAGE,
     ALGORITHM_BRIGHTNESS                  = SMOOTHED_AVERAGE,
-    ALGORITHM_VOLATILE_ORGANIC_COMPUNDS   = SMOOTHED_EXPONENTIAL,
+    ALGORITHM_VOLATILE_ORGANIC_COMPUNDS   = SMOOTHED_AVERAGE,
     //ALGORITHM_EPOCH                       = SMOOTHED_AVERAGE,
+  };
+
+  enum VARIABLES{
+    VAR_AMBIENT_HUMIDITY            = 0,
+    VAR_AMBIENT_TEMPERATURE         ,
+    VAR_AMBIENT_PRESSURE            ,
+    VAR_SOIL_TEMP                   ,
+    VAR_SOIL_HUMIDITY               ,
+    VAR_BATT_VOLTAJE                ,
+    VAR_BATT_TEMPERATURE            ,
+    //VAR_BATT_STATUS                , 
+    VAR_PANEL_VOLTAJE               ,
+    VAR_ULTRAVIOLE_INDEX            ,
+    VAR_BRIGHTNESS                  ,
+    VAR_VOLATILE_ORGANIC_COMPUNDS   ,
+    //VAR_EPOCH                       
   };
 
   String getPayload();
@@ -91,13 +107,11 @@ private:
   Scheduler *m_dataScheduler;
   Task *m_tasks[MANAGER_SIZE];
 
-  float rawValues[MANAGER_SIZE][SAMPLES];
+  double rawValues[MANAGER_SIZE][SAMPLES];
 
-  float variables[MANAGER_SIZE];
+  double variables[MANAGER_SIZE];
 
   String json_array;
-
-  bool dataAvailable();
 
   void resetValues();
 
