@@ -18,7 +18,7 @@ DS18B20 *DS18B20::m_ds18b20 = NULL;
 DS18B20::DS18B20() : tempDeviceAddress{0, 0, 0, 0, 0, 0, 0, 0} {
   pinMode(ONE_WIRE_BUS, FUNCTION_3);
 
-  Serial.println("Initializing Address");
+  // Serial.println("Initializing Address");
 
   this->oneWire = new OneWire(ONE_WIRE_BUS);
   //Serial.println("Creating One Wire");
