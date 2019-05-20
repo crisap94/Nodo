@@ -9,7 +9,7 @@
 
 #include "ArduinoJson.h"
 
-DataManager::DataManager()
+DataManager::DataManager(Scheduler *m_scheduller)
 
     : managers{ManagerType::AMBIENT_HUMIDITY,
                ManagerType::AMBIENT_TEMPERATURE,
@@ -18,12 +18,13 @@ DataManager::DataManager()
                ManagerType::SOIL_HUMIDITY,
                ManagerType::BATT_VOLTAJE,
                ManagerType::BATT_TEMPERATURE,
-               ManagerType::BATT_STATUS,
+               //ManagerType::BATT_STATUS,
                ManagerType::PANEL_VOLTAJE,
                ManagerType::ULTRAVIOLE_INDEX,
                ManagerType::BRIGHTNESS,
                ManagerType::VOLATILE_ORGANIC_COMPUNDS,
-               ManagerType::EPOCH},
+               //ManagerType::EPOCH
+               },
       intervals{Interval::INTERVAL_AMBIENT_HUMIDITY,
                 Interval::INTERVAL_AMBIENT_PRESSURE,
                 Interval::INTERVAL_AMBIENT_PRESSURE,
@@ -31,12 +32,13 @@ DataManager::DataManager()
                 Interval::INTERVAL_SOIL_HUMIDITY,
                 Interval::INTERVAL_BATT_VOLTAJE,
                 Interval::INTERVAL_BATT_TEMPERATURE,
-                Interval::INTERVAL_BATT_STATUS,
+                //Interval::INTERVAL_BATT_STATUS,
                 Interval::INTERVAL_PANEL_VOLTAJE,
                 Interval::INTERVAL_ULTRAVIOLE_INDEX,
                 Interval::INTERVAL_BRIGHTNESS,
                 Interval::INTERVAL_VOLATILE_ORGANIC_COMPUNDS,
-                Interval::INTERVAL_EPOCH},
+                //Interval::INTERVAL_EPOCH
+                },
       algorithm{Algorithm::ALGORITHM_AMBIENT_HUMIDITY,
                 Algorithm::ALGORITHM_AMBIENT_PRESSURE,
                 Algorithm::ALGORITHM_AMBIENT_PRESSURE,
@@ -44,12 +46,13 @@ DataManager::DataManager()
                 Algorithm::ALGORITHM_SOIL_HUMIDITY,
                 Algorithm::ALGORITHM_BATT_VOLTAJE,
                 Algorithm::ALGORITHM_BATT_TEMPERATURE,
-                Algorithm::ALGORITHM_BATT_STATUS,
+                //Algorithm::ALGORITHM_BATT_STATUS,
                 Algorithm::ALGORITHM_PANEL_VOLTAJE,
                 Algorithm::ALGORITHM_ULTRAVIOLE_INDEX,
                 Algorithm::ALGORITHM_BRIGHTNESS,
                 Algorithm::ALGORITHM_VOLATILE_ORGANIC_COMPUNDS,
-                Algorithm::ALGORITHM_EPOCH} {
+                //Algorithm::ALGORITHM_EPOCH
+                } {
 
   Serial.println("DEBUG -> Starting Factory Manager");
 
@@ -68,7 +71,7 @@ DataManager::DataManager()
   }
 
   Serial.println("DEBUG -> Creating Scheduller");
-  m_dataScheduler = new Scheduler();
+  m_dataScheduler = m_scheduller;
 
   for (size_t task = 0; task < MANAGER_SIZE; task++) {
     Serial.printf("DEBUG -> Creating Task (%s)\n", MANAGER_TYPE(task).c_str());
@@ -97,7 +100,7 @@ DataManager::DataManager()
                        manager = m_factoryManager->createManager(type);
                        this->rawValues[dataset][sample] = manager->getData();
 
-                       Serial.printf("Gettin Value from (%s) -> \t\t\t(%d)\n",
+                       Serial.printf("Gettin Value from (%s) -> \t\t\t(%.1f)\n",
                                      MANAGER_TYPE(task).c_str(),
                                      this->rawValues[dataset][sample]);
 
@@ -167,8 +170,16 @@ bool DataManager::isReady() {
 String DataManager::getPayload() {
 
   if (isReady()) {
-    const size_t capacity = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) +
-                            JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(13);
+    SensorManager *m_rtc = m_factoryManager->createManager(ManagerType::EPOCH);
+    SensorManager *m_bStatus = m_factoryManager->createManager(ManagerType::BATT_STATUS);
+
+    uint64_t EPOCH = m_rtc->getData();
+    bool battStatus = m_bStatus->getData();
+
+    delete m_bStatus;
+    delete m_rtc;
+
+    const size_t capacity = JSON_OBJECT_SIZE(15);
     DynamicJsonDocument doc(capacity);
 
     doc["t"] = variables[ManagerType::AMBIENT_TEMPERATURE];
@@ -180,11 +191,12 @@ String DataManager::getPayload() {
     doc["sT"] = variables[ManagerType::SOIL_TEMP];
     doc["v"] = variables[ManagerType::VOLATILE_ORGANIC_COMPUNDS];
     doc["pV"] = variables[ManagerType::PANEL_VOLTAJE];
-    doc["ti"] = variables[ManagerType::EPOCH];
+    doc["ti"] = EPOCH;
     doc["la"] = "10.399080";
     doc["lo"] = "-75.504142";
     doc["bV"] = variables[ManagerType::BATT_VOLTAJE];
     doc["bT"] = variables[ManagerType::BATT_TEMPERATURE];
+    doc["bS"] = battStatus;
 
     serializeJsonPretty(doc, json_array);
 

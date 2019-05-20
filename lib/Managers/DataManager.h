@@ -16,7 +16,7 @@
 #define _TASK_INLINE
 #include <TaskScheduler.h>
 
-#define MANAGER_SIZE 13
+#define MANAGER_SIZE 11
 #define SAMPLES 10
 
 #define NOT_SET -1
@@ -42,12 +42,12 @@ public:
     INTERVAL_SOIL_HUMIDITY               = 100,
     INTERVAL_BATT_VOLTAJE                = 100,
     INTERVAL_BATT_TEMPERATURE            = 100,
-    INTERVAL_BATT_STATUS                 = 10,
+    //INTERVAL_BATT_STATUS                 = 10,
     INTERVAL_PANEL_VOLTAJE               = 100,
     INTERVAL_ULTRAVIOLE_INDEX            = 50,
     INTERVAL_BRIGHTNESS                  = 600,
     INTERVAL_VOLATILE_ORGANIC_COMPUNDS   = 1400,
-    INTERVAL_EPOCH                       = 10,
+    //INTERVAL_EPOCH                       = 10,
   };
 
   enum SMOOTH_ALGORITHM{
@@ -58,12 +58,12 @@ public:
     ALGORITHM_SOIL_HUMIDITY               = SMOOTHED_EXPONENTIAL,
     ALGORITHM_BATT_VOLTAJE                = SMOOTHED_EXPONENTIAL,
     ALGORITHM_BATT_TEMPERATURE            = SMOOTHED_EXPONENTIAL,
-    ALGORITHM_BATT_STATUS                 = SMOOTHED_EXPONENTIAL,
+    //ALGORITHM_BATT_STATUS                 = SMOOTHED_EXPONENTIAL,
     ALGORITHM_PANEL_VOLTAJE               = SMOOTHED_AVERAGE,
     ALGORITHM_ULTRAVIOLE_INDEX            = SMOOTHED_AVERAGE,
     ALGORITHM_BRIGHTNESS                  = SMOOTHED_AVERAGE,
     ALGORITHM_VOLATILE_ORGANIC_COMPUNDS   = SMOOTHED_EXPONENTIAL,
-    ALGORITHM_EPOCH                       = SMOOTHED_AVERAGE,
+    //ALGORITHM_EPOCH                       = SMOOTHED_AVERAGE,
   };
 
   String getPayload();
@@ -71,7 +71,7 @@ public:
 
   void loop();
   
-  DataManager();
+  DataManager(Scheduler *m_scheduller);
   virtual ~DataManager();
 
 private:
@@ -85,15 +85,15 @@ private:
 
   ManagerType managers[MANAGER_SIZE];
   uint16_t intervals[MANAGER_SIZE];
-  uint16_t algorithm[MANAGER_SIZE];
+  uint8_t algorithm[MANAGER_SIZE];
 
 
   Scheduler *m_dataScheduler;
   Task *m_tasks[MANAGER_SIZE];
 
-  long rawValues[MANAGER_SIZE][SAMPLES];
+  float rawValues[MANAGER_SIZE][SAMPLES];
 
-  long variables[MANAGER_SIZE];
+  float variables[MANAGER_SIZE];
 
   String json_array;
 
