@@ -15,7 +15,7 @@ class SolarPanelVoltajeManager : public SensorManager {
 private:
   float getData() {
     PowerSupplyManager *ps = new PowerSupplyManager();
-    bool voltaje = ps->m_solarPanel->getVoltaje();
+    float voltaje = ps->m_solarPanel->getVoltaje();
     delete ps;
     return voltaje;
   }

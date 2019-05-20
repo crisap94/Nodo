@@ -14,7 +14,7 @@ class BatteryVoltajeManager : public SensorManager {
 private:
   float getData() {
     PowerSupplyManager *ps = new PowerSupplyManager();
-    bool voltaje = ps->m_battery->getVoltaje();
+    float voltaje = ps->m_battery->getVoltaje();
     delete ps;
     return voltaje;
   }

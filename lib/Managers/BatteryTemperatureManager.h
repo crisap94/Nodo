@@ -14,7 +14,7 @@ class BatteryTemperatureManager : public SensorManager {
 private:
   float getData() {
     PowerSupplyManager *ps = new PowerSupplyManager();
-    bool temp = ps->m_battery->getTemp();
+    float temp = ps->m_battery->getTemp();
     delete ps;
     return temp;
   }
