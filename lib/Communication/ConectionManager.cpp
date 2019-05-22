@@ -1,49 +1,56 @@
 
-#include "ConectionManager.h"
+#include <Scheduller.h>
 
+#include "ConectionManager.h"
 
 ConectionManager::ConectionManager() {
 
+  Serial.println(F("CONECTION MANAGER -> Creating MESH Object"));
   mesh = new painlessMesh();
-
-  userScheduler = new Scheduler();
-
-  m_dataManager = new DataManager();
 
   gatewayId = 0;
 
-  sendJSON = new Task(TASK_SECOND * 5, TASK_FOREVER, [this]() {
-    Serial.printf("SLAVE -> Executing Test Task Gateway ID: %u\n",
-                  gatewayId);
-    if (gatewayId != 0) {
-      //const size_t capacity = JSON_OBJECT_SIZE(2);
-      //DynamicJsonDocument doc(capacity);
+  Serial.println(F("CONECTION MANAGER -> Creating MESH task"));
+  tMesh = new Task(TASK_SECOND, TASK_ONCE, initMesh, &scheduller);
 
-      //doc["test"] = true;
+  Serial.println(F("CONECTION MANAGER -> Creating message Task"));
+  tSendMessage =
+      new Task(TASK_SECOND * 5, TASK_FOREVER, sendMessage, &scheduller);
+
+
+  sendMessage = [this]() {
+    if (gatewayId != 0) {
+      Serial.println(F("CONECTION MANAGER -> Gateway Connected"));
+      const size_t capacity = JSON_OBJECT_SIZE(2);
+      DynamicJsonDocument doc(capacity);
+
+      doc["test"] = true;
 
       String str;
-      //serializeJson(doc, str);
-      Serial.println("SLAVE -> Sending test Packet");
-      str = this->m_dataManager->getPayload();
+      serializeJson(doc, str);
+      Serial.println("CONECTION MANAGER -> Sending test Packet");
+      // str = this->m_dataManager->getPayload();
       mesh->sendSingle(gatewayId, str);
+      tSendMessage->disable();
+
+    } else {
+      Serial.println(F("CONECTION MANAGER -> Gateway not visible yet"));
     }
 
-  });
+  };
 
-}
+  initMesh = [this]() {
 
-ConectionManager::~ConectionManager() {
-  userScheduler->disableAll();
-  mesh->stop();
-}
+    mesh->init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA,
+               MESH_CHANNEL);
 
-void ConectionManager::begin() {
+    tSendMessage->enable();
 
+    tMesh->disable();
+  };
 
   mesh->setDebugMsgTypes(ERROR | MSG_TYPES | REMOTE | DEBUG | MESH_STATUS |
-                         CONNECTION | COMMUNICATION);
-
-  mesh->init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
+                         CONNECTION);
 
   mesh->onReceive([this](const uint32_t &from, const String &msg) {
     Serial.printf("Message: Received from %u msg=%s\n", from, msg.c_str());
@@ -58,18 +65,13 @@ void ConectionManager::begin() {
         if (String("mqtt").equals(doc["gateway"].as<String>())) {
           // check for on: true or false
           gatewayId = doc["nodeId"];
-          Serial.printf("SLAVE -> ID Bridge Gateway Updated!\n");
+          Serial.printf("CONECTION MANAGER -> ID Bridge Gateway Updated!\n");
         }
       }
     }
   });
-
-  userScheduler->addTask(*sendJSON);
-
-  sendJSON->enable();
 }
 
-void ConectionManager::loop() {
-  mesh->update();
-  userScheduler->execute();
-}
+ConectionManager::~ConectionManager() { mesh->stop(); }
+
+void ConectionManager::loop() { mesh->update(); }

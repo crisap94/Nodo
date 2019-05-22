@@ -8,6 +8,11 @@
 #if !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)
 #define EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_
 
+#define _TASK_SLEEP_ON_IDLE_RUN
+#define _TASK_STATUS_REQUEST
+#define _TASK_STD_FUNCTION
+#include <TaskSchedulerDeclarations.h>
+
 #include <ESP8266WiFi.h>
 
 #include "painlessMesh.h"
@@ -23,18 +28,21 @@
 class ConectionManager {
 
 public:
-  Scheduler *userScheduler; 
 
   ConectionManager();
   virtual ~ConectionManager();
+  
+  Task *tMesh;
+
+  std::function<void()> initMesh;
+  std::function<void()> sendMessage;
 
   void loop();
-  void begin();
 
 private:
   uint32_t gatewayId;
 
-  Task *sendJSON;
+  Task *tSendMessage;
 
   painlessMesh *mesh;
 
