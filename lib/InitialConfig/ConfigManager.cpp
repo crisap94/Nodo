@@ -7,97 +7,310 @@
 
 #include "ConfigManager.h"
 
-#include "ESP8266WiFi.h"
-
 #include <ArduinoJson.h>
+
+#include <Scheduller.h>
+
+#include <DS3231.h>
 
 #include "FS.h"
 
-ConfigManager::ConfigManager() { this->http = new HTTPClient(); }
+ConfigManager::ConfigManager() {
+
+  response = "";
+  Serial.println(F("\CONFIG MANAGER -> Creating Connection task"));
+  tConnect = new Task(TASK_SECOND, TASK_FOREVER, 0, &scheduller);
+
+  Serial.println(F("CONFIG MANAGER -> Creating HTTP Client"));
+  http = new HTTPClient();
+
+  begin();
+
+  connectToGPSServer = [this]() {
+    Serial.print(F("CONFIG MANAGER -> "));
+    Serial.print(millis());
+    Serial.println(F(": connectToGPSServer."));
+    Serial.println(F("CONFIG MANAGER -> WiFi parameters: "));
+    Serial.print(F("CONFIG MANAGER -> SSID: "));
+    Serial.println(ssid);
+    Serial.print(F("CONFIG MANAGER -> PWD : "));
+    Serial.println(password);
+
+    WiFi.mode(WIFI_STA);
+    String hostname = "node-" + ESP.getChipId();
+    WiFi.hostname(hostname);
+    WiFi.begin(ssid, password);
+    yield();
+
+    // This will pass control back to Scheduler and
+    // then continue with connection checking
+    tConnect->yield(connectCheck);
+  };
+
+  connectCheck = [this]() {
+    Serial.print(F("CONFIG MANAGER -> "));
+    Serial.print(millis());
+    Serial.println(F(": connectCheck."));
+
+    if (WiFi.status() == WL_CONNECTED) { // Connection established
+      Serial.print(F("CONFIG MANAGER -> "));
+      Serial.print(millis());
+      Serial.print(F(": Connected to GPS Server. Local ip: "));
+      Serial.println(WiFi.localIP());
+      tConnect->yield(requestFromGPS);
+    } else {
+      // re-request connection every 10 seconds
+      if (tConnect->getRunCounter() % 10 == 0) {
+        Serial.print(F("CONFIG MANAGER -> "));
+        Serial.print(millis());
+        Serial.println(F(": Re-requesting connection to GPS..."));
+
+        WiFi.disconnect(true);
+        yield(); // This is an esp8266 standard yield to allow linux wifi stack
+        // run
+        String hostname = "esp8266" + ESP.getChipId();
+        WiFi.hostname(hostname);
+        WiFi.mode(WIFI_STA);
+        WiFi.begin(ssid, password);
+        yield(); // This is an esp8266 standard yield to allow linux wifi stack
+                 // run
+      }
+
+      if (tConnect->getRunCounter() == CONNECT_TIMEOUT) { // Connection Timeout
+        tConnect->getInternalStatusRequest()->signal(
+            CONNECT_FAILED); // Signal unsuccessful completion
+        tConnect->disable();
+        Serial.print(F("CONFIG MANAGER -> "));
+        Serial.print(millis());
+        Serial.println(F(": connectOnDisable."));
+        Serial.print(millis());
+        Serial.println(F(": Unable to connect to GPS SERVER."));
+      }
+    }
+  };
+
+  requestFromGPS = [this]() {
+    Serial.println(F("Requesting data from GPS Server"));
+
+    // String url = "http://" + WiFi.gatewayIP().toString() + "/smava";
+    // String url = "https://my-json-server.typicode.com/crisap94/Nodo";
+    String url = "http://192.168.0.114:3000/smava";
+
+    yield();
+
+    http->begin(url);
+
+    int httpCode = http->GET();
+    Serial.printf("GPS request status: %i\n", httpCode);
+
+    if (httpCode == 200) { // Check the returning code
+
+      response = http->getString();
+      const size_t capacity = 256;
+      DynamicJsonDocument doc(capacity);
+
+      deserializeJson(doc, response); // Print the response payload
+
+      http->end();
+
+      strlcpy(config.zoneId, doc["zoneId"] | NOT_CONFIGURED,
+              sizeof(config.zoneId));
+      config.epoch = doc["epoch"];                 // 123123123123123
+      config.latitud = doc["latitud"];             // 10.12312312
+      config.longitud = doc["longitud"];           // -90.12312312
+      config.refreshWindow = doc["refreshWindow"]; // -90.12312312
+
+      tConnect->yield(updateTime);
+    } else {
+      http->end();
+
+      Serial.printf("Request Failed with status %i\n", httpCode);
+      Serial.println(F("Requesting again the data in 2 seconds"));
+      return;
+    }
+
+  };
+
+  updateTime = [this]() {
+    // DS3231 *_ds3231 = DS3231::getInstance();
+    // yield();
+    /**
+     * @brief Configure the RTc with the EPOCH from the  GPS server
+     * And compare
+     *
+     * TODO this have to call a method placed in the DS3231 with the new epoch
+     *
+     * ? Use the config object to get the data
+     *
+     * !this method wasn't implemented yet because need merge
+     */
+
+    Serial.println(F("CONFIG MANAGER -> Task succesfully executed"));
+
+    tConnect->yield(saveConfig);
+  };
+
+  saveConfig = [this]() {
+
+    const size_t capacity = 256;
+    DynamicJsonDocument doc(capacity);
+
+    deserializeJson(doc, response);
+
+    Serial.println(F("CONFIG MANAGER -> Processing response"));
+    Serial.println(F("CONFIG MANAGER -> Response:\n"));
+
+    serializeJsonPretty(doc, Serial);
+
+    response = "";
+
+    strlcpy(config.zoneId, doc["zoneId"] | NOT_CONFIGURED,
+            sizeof(config.zoneId));
+    config.epoch = doc["epoch"];                 // 123123123123123
+    config.latitud = doc["latitud"];             // 10.12312312
+    config.longitud = doc["longitud"];           // -90.12312312
+    config.refreshWindow = doc["refreshWindow"]; // -90.12312312
+
+    if (config.latitud != NOT_SET && config.longitud != NOT_SET &&
+        config.epoch != EPOCH_19_1_1) {
+      yield();
+      File configFile = SPIFFS.open("/config.json", "w");
+      if (!configFile) {
+        Serial.println(F("CONFIG MANAGER -> Error al abrir el archivo de "
+                         "configuración para escribir"));
+        configFile.close();
+      } else {
+
+        Serial.println(F("\n\nCONFIG MANAGER -> Saving new configuration"));
+
+        serializeJson(doc, configFile);
+        serializeJsonPretty(doc, Serial);
+        configFile.close();
+        SPIFFS.end();
+
+        tConnect->disable();
+      }
+    } else {
+
+      tConnect->yield(requestFromGPS);
+    }
+
+  };
+}
 
 ConfigManager::~ConfigManager() {}
 
-void ConfigManager::connectGPSServer() {
-  WiFi.begin(ssid, password);
+bool ConfigManager::begin() {
 
-  while (WiFi.status() != WL_CONNECTED) {
-
-    delay(1000);
-    Serial.print("Connecting..");
-  }
-  Serial.println("Conneced");
-  Serial.println("Local IP" + WiFi.localIP().toString());
-  Serial.println("Gateway IP" + WiFi.gatewayIP().toString());
-}
-
-void ConfigManager::getInitialConfigData() {
-  String url = "http://" + WiFi.gatewayIP().toString() + "/smava";
-
-  this->http->begin(url);
-
-  int httpCode = this->http->GET();
-  String payload;
-  if (httpCode == 0) { // Check the returning code
-
-    payload = this->http->getString();
-    Serial.println(payload); // Print the response payload
-  }
-
-  this->http->end();
-
-  const size_t capacity =
-      JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(6) + 110;
-  DynamicJsonDocument doc(capacity);
-
-  deserializeJson(doc, payload.c_str());
-
-  const char *zoneId = doc["zoneId"]; // "asdasdasdasdasdsadasd"
-  const char *topic = doc["topic"];   // "1234"
-
-  float gps_lat = doc["gps"]["lat"]; // 12.123123
-  float gps_lon = doc["gps"]["lon"]; // 23.123123
-
-  JsonObject time = doc["time"];
-  int time_year = time["year"];     // 1234
-  int time_month = time["month"];   // 12
-  int time_day = time["day"];       // 12
-  int time_hour = time["hour"];     // 23
-  int time_minute = time["minute"]; // 12
-  int time_second = time["second"]; // 12
-
-  if (gps_lat != 0 && gps_lon != 0) {
-    File configFile = SPIFFS.open("/config.json", "w");
-    if (!configFile) {
-      Serial.println(
-          "Error al abrir el archivo de configuración para escribir");
-    }
-    serializeJson(doc, configFile);
+  if (!SPIFFS.begin()) {
+    Serial.println(F("CONFIG MANAGER -> Error mounting File system"));
     reset();
+    return false;
   }
+
+  Serial.println(F("CONFIG MANAGER -> Success on mounting the File system"));
+
+  return true;
 }
+
+void ConfigManager::end() { SPIFFS.end(); }
 
 bool ConfigManager::isConfig() {
-  if (!SPIFFS.begin()) {
-    Serial.println("Error al montar el sistema de archivos");
-    return false;
-  }
 
-  File configFile = SPIFFS.open("/config.json", "r");
-  if (!configFile) {
-    Serial.println("Failed to open config file");
-    return false;
-  }
+  File file = SPIFFS.open("/config.json", "r");
 
-  size_t size = configFile.size();
-  if (size > 1024) {
-    Serial.println("Config file size is too large");
-    return false;
+  const size_t capacity = 256;
+  DynamicJsonDocument doc(capacity);
+
+  // Deserialize the JSON document
+  DeserializationError error = deserializeJson(doc, file);
+
+  Serial.printf("\nCONFIG MANAGER -> File parsing status: %s\n", error.c_str());
+  Serial.println(F("JSON:"));
+  serializeJsonPretty(doc, Serial);
+  if (error) {
+    file.close();
+
+    file = SPIFFS.open("/config.json", "w");
+
+    Serial.println(
+        F("\nCONFIG MANAGER -> Failed to read file, creating default config"));
+
+    const size_t capacity = 256;
+    DynamicJsonDocument defaultDoc(capacity);
+
+    defaultDoc["zoneId"] = config.zoneId;
+    defaultDoc["epoch"] = config.epoch;
+    defaultDoc["longitud"] = config.longitud;
+    defaultDoc["latitud"] = config.latitud;
+    defaultDoc["refreshWindow"] = config.refreshWindow;
+
+    Serial.println(F("CONFIG MANAGER -> Initializing the /config.json File"));
+    serializeJsonPretty(defaultDoc, Serial);
+    serializeJson(defaultDoc, file);
+
+    if (SpiffCounter == 10) {
+      yield();
+      SPIFFS.format();
+      SpiffCounter = 0;
+    }
+    SpiffCounter++;
+
+    file.close();
+
+    isConfig();
+
+  } else {
+
+    if (!doc.containsKey("zoneId") || !doc.containsKey("epoch") ||
+        !doc.containsKey("latitud") || !doc.containsKey("longitud") ||
+        !doc.containsKey("refreshWindow")) {
+      SPIFFS.format();
+      file.close();
+      reset();
+    }
+
+    file.close();
+
+    strlcpy(config.zoneId, doc["zoneId"] | NOT_CONFIGURED,
+            sizeof(config.zoneId));
+    config.epoch = doc["epoch"];       // 123123123123123
+    config.latitud = doc["latitud"];   // 10.12312312
+    config.longitud = doc["longitud"]; // -90.12312312
+    config.refreshWindow = doc["refreshWindow"];
+
+    if (config.epoch == EPOCH_19_1_1 || config.latitud == NOT_SET ||
+        config.longitud == NOT_SET) {
+
+      Serial.println(F("\nCONFIG MANAGER -> Connecting to GPS Server to Get de "
+                       "configuration"));
+
+      tConnect->setCallback(connectToGPSServer);
+      tConnect->enable();
+
+      return false;
+
+    } else {
+
+      // serializeJsonPretty(doc, Serial);
+      end();
+      tConnect->enable();
+      Serial.printf("\n\nCONFIG MANAGER -> Task Config Manager Enabled? : %s\n",
+                    tConnect->isEnabled() ? "true" : "false");
+
+      Serial.println(F("CONFIG MANAGER -> Disabling Task Config Manager"));
+      tConnect->disable();
+    }
   }
+  
+  configFlag = true;
 
   return true;
 }
 
 void ConfigManager::reset() {
-  Serial.println("Reiniciando Sistema");
+
+  Serial.println(F("\nReiniciando Sistema\n\n"));
+
   ESP.reset();
 }
