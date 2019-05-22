@@ -8,6 +8,8 @@
 
 #include <ESP8266WiFi.h>
 
+#include <ConectionManager.h>
+
 #include <ConfigManager.h>
 
 #include <DataManager.h>
@@ -22,14 +24,16 @@ Scheduler scheduller;
 
 uint8_t configFlag;
 
+ConectionManager *m_conectionManager;
 ConfigManager *m_configManager;
 DataManager *m_dataManager;
 
+Task *tConectionManager;
 Task *tConfigManager;
 Task *tDataManager;
 
-Task *tConfig =
-    new Task(TASK_SECOND, TASK_FOREVER, tVerifyConfig, &scheduller, true);
+Task *tSensors =
+    new Task(TASK_SECOND, TASK_FOREVER, tVerifyConfig, &scheduller);
 
 void setup() {
   pinMode(D5, INPUT);
@@ -52,15 +56,18 @@ void setup() {
 
   tConfigManager = m_configManager->tConnect;
   tDataManager = m_dataManager->tMain;
+  tConectionManager = m_conectionManager->tMesh;
 
   m_configManager->isConfig();
 
   // Serial.printf("\nConfig status %s\n", config ? "true" : "false");
-
-  tConfig->waitFor(tConfigManager->getInternalStatusRequest(),TASK_SECOND,TASK_FOREVER);
-  // tConfig->enable();
+  tConectionManager->waitFor(tConfigManager->getInternalStatusRequest(),
+                             TASK_ONCE, TASK_FOREVER);
+  tSensors->waitFor(tConectionManager->getInternalStatusRequest(), TASK_SECOND,
+                    TASK_FOREVER);
+  // tSensors->enable();
   // tDataManager->waitFor(tConfigManager->getInternalStatusRequest());
-  // tConfig->waitFor(tConfigManager->getInternalStatusRequest());
+  // tSensors->waitFor(tConfigManager->getInternalStatusRequest());
 }
 
 void loop() {
@@ -74,24 +81,24 @@ void loop() {
 void tNotConfigured() {
   Serial.println("Nodo No Configurado");
   if (configFlag) {
-    tConfig->setIterations(TASK_ONCE);
-    tConfig->setCallback(m_dataManager->mainFunction);
+    tSensors->setIterations(TASK_ONCE);
+    tSensors->setCallback(m_dataManager->mainFunction);
   }
-  // tConfig->disable();
+  // tSensors->disable();
 };
 
 void tConfigured() {
   Serial.println("Nodo Configurado");
   // tDataManager->enable();
-  tConfig->setIterations(TASK_ONCE);
-  tConfig->setCallback(m_dataManager->mainFunction);
+  tSensors->setIterations(TASK_ONCE);
+  tSensors->setCallback(m_dataManager->mainFunction);
 };
 
 void tVerifyConfig() {
   Serial.println("Verificando Configuracion Inicial");
   if (configFlag == true) {
-    tConfig->setCallback(tConfigured);
+    tSensors->setCallback(tConfigured);
   } else if (configFlag == false) {
-    tConfig->setCallback(tNotConfigured);
+    tSensors->setCallback(tNotConfigured);
   }
 };
