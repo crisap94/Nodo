@@ -1,33 +1,19 @@
 ///////////////////////////////////////////////////////////
-//  Memory Handler.cpp
-//  Implementation of the Class Memory Handler
+//  MemoryHandler.cpp
+//  Implementation of the Class MemoryHandler
 //  Created on:      28-Mar-2019 4:29:35 PM
 //  Original author: Cristian Arrieta P
 ///////////////////////////////////////////////////////////
 
-#include "Memory Handler.h"
+#include "MemoryHandler.h"
 
 
-Memory Handler::Memory Handler(){
-
-}
-
-
-
-Memory Handler::~Memory Handler(){
+MemoryHandler::MemoryHandler(){
 
 }
 
 
 
-
-
-bool Memory Handler::anyData(){
-
-	return false;
-}
-
-
-Memory Handler::saveData(char payload){
+MemoryHandler::~MemoryHandler(){
 
 }
