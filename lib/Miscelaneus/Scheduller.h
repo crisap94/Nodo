@@ -12,5 +12,6 @@
 // files.
 extern Scheduler scheduller;
 
+extern uint8_t configFlag ;
 
 #endif
