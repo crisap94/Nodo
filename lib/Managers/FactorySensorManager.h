@@ -35,47 +35,49 @@ public:
   SensorManager *createManager(TYPE_SENSOR_MANAGER type);
 
   inline String getManagerType(TYPE_SENSOR_MANAGER type) {
+    String strType;
     switch (type) {
     case AMBIENT_HUMIDITY:
-      return "AMBIENT_HUMIDITY";
+      strType = "AMBIENT_HUMIDITY";
       break;
     case AMBIENT_TEMPERATURE:
-      return "AMBIENT_TEMPERATURE";
+      strType = "AMBIENT_TEMPERATURE";
       break;
     case AMBIENT_PRESSURE:
-      return "AMBIENT_PRESSURE";
+      strType = "AMBIENT_PRESSURE";
       break;
     case SOIL_TEMP:
-      return "SOIL_TEMP";
+      strType = "SOIL_TEMP";
       break;
     case SOIL_HUMIDITY:
-      return "SOIL_HUMIDITY";
+      strType = "SOIL_HUMIDITY";
       break;
     case BATT_VOLTAJE:
-      return "BATT_VOLTAJE";
+      strType = "BATT_VOLTAJE";
       break;
     case BATT_TEMPERATURE:
-      return "BATT_TEMPERATURE";
+      strType = "BATT_TEMPERATURE";
       break;
     case BATT_STATUS:
-      return "BATT_STATUS";
+      strType = "BATT_STATUS";
       break;
     case PANEL_VOLTAJE:
-      return "PANEL_VOLTAJE";
+      strType = "PANEL_VOLTAJE";
       break;
     case ULTRAVIOLE_INDEX:
-      return "ULTRAVIOLE_INDEX";
+      strType = "ULTRAVIOLE_INDEX";
       break;
     case BRIGHTNESS:
-      return "BRIGHTNESS";
+      strType = "BRIGHTNESS";
       break;
     case VOLATILE_ORGANIC_COMPUNDS:
-      return "VOLATILE_ORGANIC_COMPUNDS";
+      strType = "VOLATILE_ORGANIC_COMPUNDS";
       break;
     case EPOCH:
-      return "EPOCH";
+      strType = "EPOCH";
       break;
     }
+    return strType;
   }
 };
 #endif // !defined(EA_6BFF658B_B0A6_4437_B8D6_A5614E83D114__INCLUDED_)
