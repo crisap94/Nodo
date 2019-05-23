@@ -12,27 +12,7 @@ ConectionManager::ConectionManager() {
 
   tMesh = new Task(TASK_SECOND, TASK_ONCE, initMesh, &scheduller);
 
-  mesh->setDebugMsgTypes(ERROR | MSG_TYPES | REMOTE | DEBUG | MESH_STATUS |
-                         CONNECTION | COMMUNICATION);
 
-  mesh->onReceive([this](const uint32_t &from, const String &msg) {
-    Serial.printf("Message: Received from %u msg=%s\n", from, msg.c_str());
-
-    const size_t capacity = JSON_OBJECT_SIZE(2) + 30;
-    DynamicJsonDocument doc(capacity);
-
-    deserializeJson(doc, msg);
-
-    if (doc.containsKey("gateway")) {
-      if (gatewayId == 0) {
-        if (String("mqtt").equals(doc["gateway"].as<String>())) {
-          // check for on: true or false
-          gatewayId = doc["nodeId"];
-          Serial.printf("CONECTION MANAGER -> ID Bridge Gateway Updated!\n");
-        }
-      }
-    }
-  });
 
   Serial.println(F("CONECTION MANAGER -> Creating message Task"));
   tSendMessage =
