@@ -8,16 +8,9 @@
 #if !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)
 #define EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_
 
-#define _TASK_SLEEP_ON_IDLE_RUN
-#define _TASK_STATUS_REQUEST
-#define _TASK_STD_FUNCTION
-#include <TaskSchedulerDeclarations.h>
-
-#include <ESP8266WiFi.h>
+#include <Scheduller.hpp>
 
 #include "painlessMesh.h"
-
-#include "DataManager.h"
 
 #define MESH_PREFIX "smava"
 #define MESH_PASSWORD "smava1234"
@@ -27,25 +20,27 @@
 
 class ConectionManager {
 
+
 public:
 
   ConectionManager();
   virtual ~ConectionManager();
   
   Task *tMesh;
+  Task *tSendMessage;
 
   std::function<void()> initMesh;
   std::function<void()> sendMessage;
+
+  
 
   void loop();
 
 private:
   uint32_t gatewayId;
 
-  Task *tSendMessage;
 
   painlessMesh *mesh;
 
-  DataManager *m_dataManager;
 };
 #endif // !defined(EA_995858AF_5C4C_4f8f_AC9F_9715CA0F757F__INCLUDED_)

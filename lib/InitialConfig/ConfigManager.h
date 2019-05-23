@@ -36,6 +36,7 @@
 class ConfigManager {
 
 public:
+
   struct Config {
     char zoneId[64] = NOT_CONFIGURED;
     uint64_t epoch = EPOCH_19_1_1;
@@ -49,6 +50,9 @@ public:
 
   Task *tConnect;
 
+  Task *tConfig;
+  std::function<void()> checkInitialConfig;
+
   HTTPClient *http;
   String response;
   uint8_t SpiffCounter = 0;
@@ -58,13 +62,11 @@ public:
   ConfigManager();
   virtual ~ConfigManager();
 
-  bool begin();
-  void end();
-  bool isConfig();
-  void reset();
 
   private:
 
+  void reset();
+  void end();
 
   std::function<void()> connectToGPSServer;
   std::function<void()> connectCheck;
@@ -72,6 +74,5 @@ public:
   std::function<void()> updateTime;
   std::function<void()> saveConfig;
   
-  std::function<void()> loadConfig;
 };
 #endif // !defined(EA_11E06D4D_4D21_4530_9700_8484EA67C5A8__INCLUDED_)
