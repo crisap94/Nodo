@@ -11,7 +11,7 @@
 
 #include "FS.h"
 
-#include <Scheduller.h>
+#include <Scheduller.hpp>
 
 DataManager::DataManager()
 
@@ -152,6 +152,9 @@ DataManager::DataManager()
     loadConfig();
     for (size_t task = 0; task < MANAGER_SIZE; task++) {
       // Enable all the Tasks previusly added to thescheduller
+      Serial.printf("\nDATA MANAGER -> Enabling task (%s)\n\n",
+                    MANAGER_TYPE(managers[task]).c_str());
+                    
       if (managers[task] == ManagerType::VOLATILE_ORGANIC_COMPUNDS) {
         this->m_tasks[task]->enableDelayed(5000);
       } else {
