@@ -15,8 +15,8 @@
 
 #include <FS.h>
 
-#define MESH_PREFIX "whateverYouLike"
-#define MESH_PASSWORD "somethingSneaky"
+#define MESH_PREFIX "smav\xE2\x90\x81"
+#define MESH_PASSWORD "smava1234"
 #define MESH_PORT 5555
 #define MESH_CHANNEL 4
 
@@ -31,7 +31,7 @@ Scheduler scheduller;
 
 uint8_t configFlag = false;
 
-painlessMesh mesh;
+painlessMesh *mesh = new painlessMesh();
 ConfigManager *m_configManager;
 DataManager *m_dataManager;
 
@@ -76,10 +76,10 @@ void setup() {
     Serial.print(F("MAIN -> SPIFF Formated\n\n"));
   }
 
-  // if (WiFi.status() == WL_CONNECTED) {
-  //   Serial.println(F("MAIN -> Disconecting from previus connection"));
-  //   WiFi.disconnect();
-  // }
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println(F("MAIN -> Disconecting from previus connection"));
+    WiFi.disconnect();
+  }
 
   m_configManager = new ConfigManager();
   m_dataManager = new DataManager();
@@ -92,8 +92,9 @@ void setup() {
 
   tConectionManager->waitFor(tConfigManager->getInternalStatusRequest());
 
+
   tSendMessage->waitFor(tConectionManager->getInternalStatusRequest(),
-                        TASK_SECOND * 5, TASK_FOREVER);
+                       TASK_SECOND * 5, TASK_FOREVER);
 
   // tMainConfig = m_configManager->tConfig;
 
@@ -117,7 +118,7 @@ void setup() {
 
 void loop() {
   scheduller.execute(); // Only Scheduler should be executed in the loop
-  mesh.update();
+  mesh->update();
   if (m_dataManager->isReady()) {
     String paylaod = m_dataManager->getPayload();
     Serial.println(paylaod);
@@ -161,7 +162,7 @@ void sendMessage() {
     serializeJson(doc, str);
     Serial.println("CONECTION MANAGER -> Sending test Packet");
     // str = this->m_dataManager->getPayload();
-    mesh.sendSingle(gatewayId, str);
+    mesh->sendSingle(gatewayId, str);
     tSendMessage->disable();
 
   } else {
@@ -171,12 +172,12 @@ void sendMessage() {
 
 void initMesh() {
   Serial.println(F("CONECTION MANAGER -> Setting up DEBUG messages"));
-  mesh.setDebugMsgTypes(ERROR | STARTUP | MESH_STATUS | CONNECTION | SYNC |
+  mesh->setDebugMsgTypes(ERROR | STARTUP | MESH_STATUS | CONNECTION | SYNC |
                         S_TIME | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE |
                         APPLICATION | DEBUG);
 
   Serial.println(F("CONECTION MANAGER -> Setting up on recive callback"));
-  mesh.onReceive([](const uint32_t &from, const String &msg) {
+  mesh->onReceive([](const uint32_t &from, const String &msg) {
     Serial.printf("Message: Received from %u msg=%s\n", from, msg.c_str());
 
     const size_t capacity = JSON_OBJECT_SIZE(2) + 30;
@@ -196,5 +197,5 @@ void initMesh() {
   });
 
   Serial.println(F("CONECTION MANAGER -> Init MESH "));
-  mesh.init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
+  mesh->init(MESH_PREFIX, MESH_PASSWORD,&scheduller ,MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
 };
