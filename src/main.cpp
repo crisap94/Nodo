@@ -15,7 +15,7 @@
 
 #include <FS.h>
 
-#define MESH_PREFIX "smav\xE2\x90\x81"
+#define MESH_PREFIX "smava"
 #define MESH_PASSWORD "smava1234"
 #define MESH_PORT 5555
 #define MESH_CHANNEL 4
