@@ -48,7 +48,7 @@ void setup() {
   Serial.println(
       F("============================================================"));
   Serial.println(
-      F("                         NODO SLAVE                         "));
+      F("                         NODO GATEWAY                       "));
   Serial.println(
       F("============================================================"));
   Serial.print("\n\n");
@@ -70,7 +70,7 @@ void setup() {
   }
 
   m_configManager = new ConfigManager();
-  
+  m_conectionManager = new ConectionManager();
   m_dataManager = new DataManager();
 
   tConfigManager = m_configManager->tConnect;
@@ -90,7 +90,7 @@ void setup() {
   // Serial.printf("\nConfig status %s\n", config ? "true" : "false");
   tConectionManager->setCallback(m_conectionManager->initMesh);
   tConectionManager->waitFor(tConfigManager->getInternalStatusRequest(),
-                             TASK_SECOND, TASK_FOREVER);
+                             TASK_SECOND, TASK_ONCE);
 
   //tSensors->waitFor(tConectionManager->getInternalStatusRequest(), TASK_SECOND,
   //                  TASK_FOREVER);
