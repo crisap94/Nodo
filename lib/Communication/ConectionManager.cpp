@@ -62,7 +62,7 @@ ConectionManager::ConectionManager() {
   initMesh = [this]() {
     
     Serial.println(F("CONECTION MANAGER -> Init MESH "));
-    mesh->init(MESH_PREFIX, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA,
+    mesh->init(MESH_PREFIX, MESH_PASSWORD,&scheduller, MESH_PORT, WIFI_AP_STA,
                MESH_CHANNEL);
 
     tSendMessage->enable();
