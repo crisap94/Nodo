@@ -197,5 +197,5 @@ void initMesh() {
   });
 
   Serial.println(F("CONECTION MANAGER -> Init MESH "));
-  mesh->init(MESH_PREFIX, MESH_PASSWORD,&scheduller ,MESH_PORT, WIFI_AP_STA, MESH_CHANNEL);
+  mesh->init("WhateverYouLike", "SomethingSneaky",&scheduller ,5555, WIFI_AP_STA, 4);
 };
