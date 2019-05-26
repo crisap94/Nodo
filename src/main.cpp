@@ -23,7 +23,7 @@ Scheduler scheduller;
 
 uint8_t configFlag = false;
 
-ConectionManager *m_conectionManager = new ConectionManager();
+ConectionManager *m_conectionManager;
 ConfigManager *m_configManager;
 DataManager *m_dataManager;
 
